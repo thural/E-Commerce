@@ -2,10 +2,11 @@ version: '3.8'
 services:
 
   shopping-cart-db:
+    container_name: shopping-cart
     image: mysql:8.0
     restart: on-failure
     volumes:
-      - shopping-cart_data:/var/lib/mysql
+      - monolith_data:/var/lib/mysql
     environment:
       MYSQL_ROOT_PASSWORD: ${DB_ROOT_PASSWORD}
       MYSQL_DATABASE: ${DB_NAME}
@@ -16,22 +17,22 @@ services:
     ports:
       - ${DB_PORT_NUMBER}:3306
 
-  shopping-cart:
-    build:
-      context: ../..
-      dockerfile: buildfiles/Dockerfile
-    image: thural/shopping-cart:latest
-    depends_on:
-      - shopping-cart-db
-    env_file:
-      - ./.env
-    networks:
-      - monolith-network
-    ports:
-      - ${SERVER_PORT_NUMBER}:8080
-    volumes:
-      - ./:/app
-      - /target
+#  shopping-cart:
+#    build:
+#      context: ../..
+#      dockerfile: buildfiles/Dockerfile
+#    image: thural/shopping-cart:latest
+#    depends_on:
+#      - shopping-cart-db
+#    env_file:
+#      - ./.env
+#    networks:
+#      - monolith-network
+#    ports:
+#      - ${SERVER_PORT_NUMBER}:8080
+#    volumes:
+#      - ./:/app
+#      - /target
 
 volumes:
   monolith_data:

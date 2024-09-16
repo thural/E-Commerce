@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <title>Edit Form</title>
+</head>
+<body>
+<div class="container">
+    <div class="center">
+        <h1>edit product</h1>
+        <form> method="post" enctype="multipart/form-data" th:object="${productDto}">
+            <div class="input-block">
+                <label>id</label>
+                <div class="input-row">
+                    <input readonly th:value="${productDto.id}">
+                </div>
+            </div>
+
+            <div class="input-block">
+                <label>name</label>
+                <div class="input-row">
+                    <input th:field="${productDto.name}">
+                    <p th:errorClass="text-error" th:errors="${productDto.name}"
+                       th:if="${#fields.hasErrors('name')}"></p>
+                </div>
+            </div>
+
+            <div class="input-block">
+                <label>category</label>
+                <div class="input-row">
+                    <select th:field="${productDto.category}">
+                        <option value="other">other</option>
+                        <option value="phone">phone</option>
+                        <option value="computer">computer</option>
+                        <option value="accessory">accessory</option>
+                        <option value="printer">printer</option>
+                        <option value="camera">camera</option>
+                    </select>
+                    <p th:errorClass="text-error" th:errors="${productDto.category}"
+                       th:if="${#fields.hasErrors('category')}"></p>
+                </div>
+            </div>
+
+            <div class="input-block">
+                <label>price</label>
+                <div class="input-row">
+                    <input step="0.01" th:field="${productDto.price}" type="number">
+                    <p th:errorClass="text-error" th:errors="${productDto.price}"
+                       th:if="${#fields.hasErrors('price')}"></p>
+                </div>
+            </div>
+
+            <div class="input-block">
+                <label>description</label>
+                <div class="input-row">
+                    <input th:field="${productDto.description}">
+                    <p th:errorClass="text-error" th:errors="${productDto.description}"
+                       th:if="${#fields.hasErrors('description')}"></p>
+                </div>
+            </div>
+
+            <div class="block">
+                <div class="image-card">
+                    <img alt="product image" th:src="@{'/images/' + ${product.imageFileName}}" width="6rem">
+                </div>
+            </div>
+
+            <div class="input-block">
+                <label>image</label>
+                <div class="input-row">
+                    <input th:field="${productDto.imageFile}" type="file">
+                    <p th:errorClass="text-error" th:errors="${productDto.imageFile}"
+                       th:if="${#fields.hasErrors('imageFile')}"></p>
+                </div>
+            </div>
+
+            <div class="input-block">
+                <div class="grid">
+                    <button class="button" type="submit">submit</button>
+                    <button class="button" type="reset">cancel</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+</body>
+</html>

@@ -1,0 +1,46 @@
+spring:
+  application:
+    name: shopping-cart
+
+  devtools:
+    livereload.enabled: true
+    restart:
+      enabled: true
+
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/shopping_cart
+    username: ${DB_USER_USERNAME}
+    password: ${DB_USER_PASSWORD}
+
+  jpa:
+    database: mysql
+    open-in-view: true
+    show-sql: true
+    hibernate:
+      ddl-auto: update
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.MySQLDialect
+        show_sql: true
+        format_sql: true
+
+  flyway:
+    enabled: false
+logging:
+  #  file:
+  #    name: shopping-cart.log
+  level:
+    root: INFO
+    org.springframework.messaging: INFO
+    org.hibernate.orm.jdbc.bind: ERROR
+    dev.thural.shopping-cart.service: INFO
+    org.springframework.security: INFO
+    org.hibernate.sql: ERROR
+    org.springframework.web.servlet.handler.HandlerMappingIntrospector: ERROR
+  logback:
+    rollingpolicy:
+      max-file-size: 2MB
+      max-history: 3
+server:
+  port: 8080
