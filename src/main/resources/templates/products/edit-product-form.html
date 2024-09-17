@@ -1,8 +1,8 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>Edit Form</title>
+    <title>Edit Product</title>
 </head>
 <body>
 <div class="container">
@@ -10,25 +10,25 @@
         <h1>edit product</h1>
         <form> method="post" enctype="multipart/form-data" th:object="${productDto}">
             <div class="input-block">
-                <label>id</label>
                 <div class="input-row">
-                    <input readonly th:value="${productDto.id}">
+                    <label for="id">id</label>
+                    <input id="id" readonly th:value="${productDto.id}">
                 </div>
             </div>
 
             <div class="input-block">
-                <label>name</label>
+                <label for="name">name</label>
                 <div class="input-row">
-                    <input th:field="${productDto.name}">
+                    <input id="name" th:field="${productDto.name}">
                     <p th:errorClass="text-error" th:errors="${productDto.name}"
                        th:if="${#fields.hasErrors('name')}"></p>
                 </div>
             </div>
 
             <div class="input-block">
-                <label>category</label>
+                <label for="category">category</label>
                 <div class="input-row">
-                    <select th:field="${productDto.category}">
+                    <select id="category" th:field="${productDto.category}">
                         <option value="other">other</option>
                         <option value="phone">phone</option>
                         <option value="computer">computer</option>
@@ -42,18 +42,18 @@
             </div>
 
             <div class="input-block">
-                <label>price</label>
+                <label for="price">price</label>
                 <div class="input-row">
-                    <input step="0.01" th:field="${productDto.price}" type="number">
+                    <input id="price" step="0.01" th:field="${productDto.price}" type="number">
                     <p th:errorClass="text-error" th:errors="${productDto.price}"
                        th:if="${#fields.hasErrors('price')}"></p>
                 </div>
             </div>
 
             <div class="input-block">
-                <label>description</label>
+                <label for="description">description</label>
                 <div class="input-row">
-                    <input th:field="${productDto.description}">
+                    <input id="description" th:field="${productDto.description}">
                     <p th:errorClass="text-error" th:errors="${productDto.description}"
                        th:if="${#fields.hasErrors('description')}"></p>
                 </div>
@@ -66,9 +66,9 @@
             </div>
 
             <div class="input-block">
-                <label>image</label>
+                <label for="image-input">image</label>
                 <div class="input-row">
-                    <input th:field="${productDto.imageFile}" type="file">
+                    <input id="image-input" th:field="${productDto.imageFile}" type="file">
                     <p th:errorClass="text-error" th:errors="${productDto.imageFile}"
                        th:if="${#fields.hasErrors('imageFile')}"></p>
                 </div>

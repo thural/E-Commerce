@@ -1,14 +1,25 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity6"
+      xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <title>Shopping Home</title>
 </head>
 <body>
 <div class="container">
-    <h1>
-        welcome back username
-    </h1>
+    <div sec:authorize="isAuthenticated()">
+        <h1>welcome back ${username}</h1>
+        <form action="/logout" method="post">
+            <input th:name="${_csrf.parameterName}" th:value="${_csrf.token}" type="hidden">
+            <button type="submit">logout</button>
+        </form>
+    </div>
+    <div sec:authorize="!isAuthenticated()">
+        <strong>you have not signed in</strong>
+        <button class="button primary" onclick="window.location.href='/authentication';">login</button>
+        <button class="button primary" onclick="window.location.href='/authentication/signup';">register</button>
+        <button class="button primary" data-bs-dismiss="alert">close</button>
+    </div>
     <button class="button primary" onclick="window.location.href='/products';">products</button>
 </div>
 </body>

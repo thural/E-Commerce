@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Shopping Cart</title>
+</head>
+<body>
+<div class="container">
+    <div class="center">
+        <h1>Signup Form</h1>
+
+        <div role="alert" th:if="${success}">
+            <strong>account created successfully</strong>
+            <button class="button primary" onclick="window.location.href='/login';">login</button>
+            <button class="button primary" data-bs-dismiss="alert">close</button>
+        </div>
+
+        <div role="alert" th:if="${#fields.hasErrors('account')}">
+            <strong>error during account creation</strong>
+            <button class="button primary" data-bs-dismiss="alert">close</button>
+        </div>
+
+
+        <form method="post" th:object="${registrationDto}">
+            <input th:name="${_csrf.parameterName}" th:value="${_csrf.token}" type="hidden">
+
+            <div class="input-block">
+                <label for="username">username</label>
+                <div class="input-row">
+                    <input id="username" th:field="${registrationDto.username}">
+                    <p th:errorClass="text-error" th:errors="${registrationDto.username}"
+                       th:if="${#fields.hasErrors('username')}"></p>
+                </div>
+            </div>
+
+            <div class="input-block">
+                <label for="email">email</label>
+                <div class="input-row">
+                    <input id="email" th:field="${registrationDto.email}" type="email">
+                    <p th:errorClass="text-error" th:errors="${registrationDto.email}"
+                       th:if="${#fields.hasErrors('email')}"></p>
+                </div>
+            </div>
+
+            <div class="input-block">
+                <label for="firstname">first name</label>
+                <div class="input-row">
+                    <input id="firstname" th:field="${registrationDto.firstname}">
+                    <p th:errorClass="text-error" th:errors="${registrationDto.firstname}"
+                       th:if="${#fields.hasErrors('firstname')}"></p>
+                </div>
+            </div>
+
+            <div class="input-block">
+                <label for="lastname">last name</label>
+                <div class="input-row">
+                    <input id="lastname" th:field="${registrationDto.lastname}">
+                    <p th:errorClass="text-error" th:errors="${registrationDto.lastname}"
+                       th:if="${#fields.hasErrors('lastname')}"></p>
+                </div>
+            </div>
+
+            <div class="input-block">
+                <label for="password">password</label>
+                <div class="input-row">
+                    <input id="password" th:field="${registrationDto.password}" type="password">
+                    <p th:errorClass="text-error" th:errors="${registrationDto.password}"
+                       th:if="${#fields.hasErrors('password')}"></p>
+                </div>
+            </div>
+
+            <div class="input-block">
+                <label for="confirm-password">confirm password></label>
+                <div class="input-row">
+                    <input id="confirm-password" th:field="${registrationDto.confirmPassword}" type="password">
+                    <p th:errorClass="text-error" th:errors="${registrationDto.confirmPassword}"
+                       th:if="${#fields.hasErrors('confirmPassword')}"></p>
+                </div>
+            </div>
+
+            <button class="button primary" type="submit">submit</button>
+            <button class="button primary" onclick="window.location.href='/';">cancel</button>
+        </form>
+    </div>
+</div>
+</body>
+</html>
