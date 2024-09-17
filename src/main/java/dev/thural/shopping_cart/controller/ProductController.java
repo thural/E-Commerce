@@ -19,11 +19,13 @@ import java.util.List;
 @RequiredArgsConstructor
 @RequestMapping("/products")
 public class ProductController {
+
     private final ProductService service;
 
+
     @PostMapping("/edit")
-    String editProduct(@Valid @ModelAttribute ProductDto productDto, Model model,
-                       BindingResult result, @RequestParam Long id) {
+    public String editProduct(@Valid @ModelAttribute ProductDto productDto, Model model,
+                              BindingResult result, @RequestParam Long id) {
         Product product = service.getProductById(id)
                 .orElseThrow(EntityNotFoundException::new);
         model.addAttribute("product", product);
@@ -32,6 +34,7 @@ public class ProductController {
         return "redirect:/products";
     }
 
+
     @GetMapping
     public String showProductList(Model model) {
         List<Product> products = service.getAll();
@@ -39,12 +42,14 @@ public class ProductController {
         return "products/index";
     }
 
+
     @GetMapping("/create")
     public String getCreateForm(Model model) {
         ProductDto productDto = new ProductDto();
         model.addAttribute("productDto", productDto);
         return "products/create-product-form";
     }
+
 
     @GetMapping("/edit")
     public String getEditPage(Model model, @RequestParam Long id) {
@@ -60,6 +65,7 @@ public class ProductController {
                 .orElse("redirect:/products");
     }
 
+
     @PostMapping("/create")
     public String createProduct(@Valid @ModelAttribute ProductDto productDto, BindingResult result) {
         if (productDto.getImageFile().isEmpty()) result.addError(
@@ -70,9 +76,12 @@ public class ProductController {
         return "redirect:/products";
     }
 
+
     @GetMapping("/delete")
     public String deleteProduct(@RequestParam Long id) {
         service.deleteProductById(id);
         return "redirect:/products";
     }
+
+
 }

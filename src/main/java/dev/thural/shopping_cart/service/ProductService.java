@@ -8,6 +8,7 @@ import java.util.List;
 import java.util.Optional;
 
 public interface ProductService {
+
     List<Product> getAll();
 
     void saveProduct(ProductDto productDto);
@@ -19,4 +20,5 @@ public interface ProductService {
     void updateProduct(@Valid ProductDto productDto, Product product);
 
     void deleteProductById(Long id);
+
 }
