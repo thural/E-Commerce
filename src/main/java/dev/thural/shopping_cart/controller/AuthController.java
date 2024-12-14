@@ -2,6 +2,7 @@ package dev.thural.shopping_cart.controller;
 
 import dev.thural.shopping_cart.model.RegistrationDto;
 import dev.thural.shopping_cart.service.UserService;
+import dev.thural.shopping_cart.service.impl.AuthenticationService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
@@ -10,19 +11,23 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
 
 @Controller
-@RequestMapping("/auth")
 @RequiredArgsConstructor
 public class AuthController {
 
+    private final AuthenticationService authenticationService;
     private final UserService userService;
+
+    @GetMapping("/login")
+    public String loginPage() {
+        return "login"; // This should correspond to login.html in templates directory
+    }
 
     @GetMapping("/register")
     public String showRegistrationForm(Model model) {
         model.addAttribute("registrationDto", new RegistrationDto());
-        return "authentication/signup";
+        return "register";
     }
 
     @PostMapping("/register")
@@ -51,18 +56,18 @@ public class AuthController {
 
         // If there are validation errors, return to the form
         if (bindingResult.hasErrors()) {
-            return "authentication/signup";
+            return "register";
         }
 
         try {
             userService.createUser(dto);
-            return "redirect:/auth/register?success";
+            return "redirect:/register?success";
         } catch (Exception e) {
             bindingResult.reject(
                     "error.registrationFailed",
                     "Registration could not be completed"
             );
-            return "authentication/signup";
+            return "register";
         }
     }
 }

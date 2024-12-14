@@ -28,7 +28,7 @@
         </div>
 
         <!-- Registration Form -->
-        <form method="post" th:action="@{/auth/register}" th:object="${registrationDto}">
+        <form method="post" th:action="@{/register}" th:object="${registrationDto}">
             <!-- CSRF Token -->
             <input th:name="${_csrf.parameterName}" th:value="${_csrf.token}" type="hidden">
 

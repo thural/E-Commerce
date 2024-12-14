@@ -16,8 +16,8 @@
     </div>
     <div sec:authorize="!isAuthenticated()">
         <strong>you have not signed in</strong>
-        <button class="button primary" onclick="window.location.href='/authentication';">login</button>
-        <button class="button primary" onclick="window.location.href='/authentication/signup';">register</button>
+        <button class="button primary" onclick="window.location.href='/login';">login</button>
+        <button class="button primary" onclick="window.location.href='/register';">register</button>
         <button class="button primary" data-bs-dismiss="alert">close</button>
     </div>
     <button class="button primary" onclick="window.location.href='/products';">products</button>
