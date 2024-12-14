@@ -1,6 +1,10 @@
 spring:
   application:
     name: shopping-cart
+  servlet:
+    multipart:
+      max-file-size: 5MB
+      max-request-size: 5MB
 
   devtools:
     livereload.enabled: true
@@ -10,8 +14,8 @@ spring:
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
     url: jdbc:mysql://localhost:3306/shopping_cart
-    username: ${DB_USER_USERNAME}
-    password: ${DB_USER_PASSWORD}
+    username: ${DB_ROOT_USERNAME}
+    password: ${DB_ROOT_PASSWORD}
 
   jpa:
     database: mysql
@@ -44,3 +48,7 @@ logging:
       max-history: 3
 server:
   port: 8080
+  error.whitelabel.enabled: false
+
+file:
+  upload-dir: ./uploads

@@ -2,83 +2,167 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>Edit Product</title>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+    <title th:text="#{product.edit.title}">Edit Product</title>
+    <link rel="stylesheet" th:href="@{/css/styles.css}">
 </head>
 <body>
 <div class="container">
-    <div class="center">
-        <h1>edit product</h1>
-        <form> method="post" enctype="multipart/form-data" th:object="${productDto}">
-            <div class="input-block">
-                <div class="input-row">
-                    <label for="id">id</label>
-                    <input id="id" readonly th:value="${productDto.id}">
+    <div class="product-edit-form">
+        <h1 th:text="#{product.edit.heading}">Edit Product</h1>
+
+        <form
+                enctype="multipart/form-data"
+                method="post"
+                novalidate="novalidate"
+                th:action="@{/products/edit}"
+                th:object="${productDto}"
+        >
+            <!-- ID Field (Read-only) -->
+            <div class="form-group">
+                <label for="id" th:text="#{product.id}">ID</label>
+                <input
+                        aria-describedby="id-help"
+                        class="form-control"
+                        id="id"
+                        readonly
+                        th:value="${productDto.id}"
+                        type="text"
+                >
+                <small class="form-text text-muted" id="id-help" th:text="#{product.id.help}">
+                    Product ID (cannot be changed)
+                </small>
+            </div>
+
+            <!-- Name Field -->
+            <div class="form-group">
+                <label for="name" th:text="#{product.name}">Name</label>
+                <input
+                        aria-describedby="name-error"
+                        class="form-control"
+                        id="name"
+                        th:classappend="${#fields.hasErrors('name')} ? 'is-invalid' : ''"
+                        th:field="${productDto.name}"
+                        type="text"
+                >
+                <div
+                        class="invalid-feedback"
+                        id="name-error"
+                        th:errors="${productDto.name}"
+                        th:if="${#fields.hasErrors('name')}"
+                ></div>
+            </div>
+
+            <!-- Category Field -->
+            <div class="form-group">
+                <label for="category" th:text="#{product.category}">Category</label>
+                <select
+                        aria-describedby="category-error"
+                        class="form-control"
+                        id="category"
+                        th:classappend="${#fields.hasErrors('category')} ? 'is-invalid' : ''"
+                        th:field="${productDto.category}"
+                >
+                    <option
+                            th:each="cat : ${T(com.example.ProductCategory).values()}"
+                            th:text="${cat}"
+                            th:value="${cat}"
+                    ></option>
+                </select>
+                <div
+                        class="invalid-feedback"
+                        id="category-error"
+                        th:errors="${productDto.category}"
+                        th:if="${#fields.hasErrors('category')}"
+                ></div>
+            </div>
+
+            <!-- Price Field -->
+            <div class="form-group">
+                <label for="price" th:text="#{product.price}">Price</label>
+                <input
+                        aria-describedby="price-error"
+                        class="form-control"
+                        id="price"
+                        min="0"
+                        step="0.01"
+                        th:classappend="${#fields.hasErrors('price')} ? 'is-invalid' : ''"
+                        th:field="${productDto.price}"
+                        type="number"
+                >
+                <div
+                        class="invalid-feedback"
+                        id="price-error"
+                        th:errors="${productDto.price}"
+                        th:if="${#fields.hasErrors('price')}"
+                ></div>
+            </div>
+
+            <!-- Description Field -->
+            <div class="form-group">
+                <label for="description" th:text="#{product.description}">Description</label>
+                <textarea
+                        aria-describedby="description-error"
+                        class="form-control"
+                        id="description"
+                        th:classappend="${#fields.hasErrors('description')} ? 'is-invalid' : ''"
+                        th:field="${productDto.description}"
+                ></textarea>
+                <div
+                        class="invalid-feedback"
+                        id="description-error"
+                        th:errors="${productDto.description}"
+                        th:if="${#fields.hasErrors('description')}"
+                ></div>
+            </div>
+
+            <!-- Current Image -->
+            <div class="form-group">
+                <label th:text="#{product.current.image}">Current Image</label>
+                <div class="image-preview">
+                    <img
+                            alt="Current Product Image"
+                            class="img-fluid"
+                            th:src="@{'/images/' + ${productDto.imageFileName}}"
+                    >
                 </div>
             </div>
 
-            <div class="input-block">
-                <label for="name">name</label>
-                <div class="input-row">
-                    <input id="name" th:field="${productDto.name}">
-                    <p th:errorClass="text-error" th:errors="${productDto.name}"
-                       th:if="${#fields.hasErrors('name')}"></p>
-                </div>
+            <!-- Image Upload -->
+            <div class="form-group">
+                <label for="imageFile" th:text="#{product.image.upload}">Upload Image</label>
+                <input
+                        aria-describedby="image-error"
+                        class="form-control-file"
+                        id="imageFile"
+                        th:classappend="${#fields.hasErrors('imageFile')} ? 'is-invalid' : ''"
+                        th:field="${productDto.imageFile}"
+                        type="file"
+                >
+                <div
+                        class="invalid-feedback"
+                        id="image-error"
+                        th:errors="${productDto.imageFile}"
+                        th:if="${#fields.hasErrors('imageFile')}"
+                ></div>
             </div>
 
-            <div class="input-block">
-                <label for="category">category</label>
-                <div class="input-row">
-                    <select id="category" th:field="${productDto.category}">
-                        <option value="other">other</option>
-                        <option value="phone">phone</option>
-                        <option value="computer">computer</option>
-                        <option value="accessory">accessory</option>
-                        <option value="printer">printer</option>
-                        <option value="camera">camera</option>
-                    </select>
-                    <p th:errorClass="text-error" th:errors="${productDto.category}"
-                       th:if="${#fields.hasErrors('category')}"></p>
-                </div>
-            </div>
-
-            <div class="input-block">
-                <label for="price">price</label>
-                <div class="input-row">
-                    <input id="price" step="0.01" th:field="${productDto.price}" type="number">
-                    <p th:errorClass="text-error" th:errors="${productDto.price}"
-                       th:if="${#fields.hasErrors('price')}"></p>
-                </div>
-            </div>
-
-            <div class="input-block">
-                <label for="description">description</label>
-                <div class="input-row">
-                    <input id="description" th:field="${productDto.description}">
-                    <p th:errorClass="text-error" th:errors="${productDto.description}"
-                       th:if="${#fields.hasErrors('description')}"></p>
-                </div>
-            </div>
-
-            <div class="block">
-                <div class="image-card">
-                    <img alt="product image" th:src="@{'/images/' + ${product.imageFileName}}" width="6rem">
-                </div>
-            </div>
-
-            <div class="input-block">
-                <label for="image-input">image</label>
-                <div class="input-row">
-                    <input id="image-input" th:field="${productDto.imageFile}" type="file">
-                    <p th:errorClass="text-error" th:errors="${productDto.imageFile}"
-                       th:if="${#fields.hasErrors('imageFile')}"></p>
-                </div>
-            </div>
-
-            <div class="input-block">
-                <div class="grid">
-                    <button class="button" type="submit">submit</button>
-                    <button class="button" type="reset">cancel</button>
-                </div>
+            <!-- Action Buttons -->
+            <div class="form-actions">
+                <button
+                        class="btn btn-primary"
+                        th:text="#{button.submit}"
+                        type="submit"
+                >
+                    Submit
+                </button>
+                <button
+                        class="btn btn-secondary"
+                        th:text="#{button.cancel}"
+                        type="reset"
+                >
+                    Cancel
+                </button>
             </div>
         </form>
     </div>

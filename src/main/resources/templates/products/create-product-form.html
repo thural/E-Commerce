@@ -2,73 +2,189 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
     <title>Create Product</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 1rem;
+        }
+
+        .input-block {
+            margin-bottom: 1rem;
+        }
+
+        .input-row {
+            display: flex;
+            flex-direction: column;
+        }
+
+        label {
+            margin-bottom: 0.5rem;
+            font-weight: bold;
+        }
+
+        input, select, textarea {
+            width: 100%;
+            padding: 0.5rem;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+
+        .text-error {
+            color: red;
+            font-size: 0.8rem;
+            margin-top: 0.25rem;
+        }
+
+        .button {
+            display: inline-block;
+            padding: 0.5rem 1rem;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            margin-right: 0.5rem;
+        }
+
+        .button.secondary {
+            background-color: #6c757d;
+        }
+
+        .image-preview {
+            max-width: 200px;
+            max-height: 200px;
+            margin-top: 0.5rem;
+        }
+    </style>
 </head>
 <body>
 <div class="container">
     <div class="center">
-        <h1>add new product</h1>
-        <form> method="post" enctype="multipart/form-data" th:object="${productDto}">
+        <h1>Add New Product</h1>
+
+        <!-- Global Errors -->
+        <div class="alert error" th:if="${#fields.hasGlobalErrors()}">
+            <ul>
+                <li th:each="err : ${#fields.globalErrors()}" th:text="${err}"></li>
+            </ul>
+        </div>
+
+        <form enctype="multipart/form-data"
+              method="post"
+              th:action="@{/products/create}"
+              th:object="${productDto}">
+
+            <!-- Name Field -->
             <div class="input-block">
-                <label for="name">name</label>
+                <label for="name">Name</label>
                 <div class="input-row">
-                    <input id="name" th:field="${productDto.name}">
-                    <p th:errorClass="text-error" th:errors="${productDto.name}"
+                    <input id="name" th:errorclass="is-invalid" th:field="*{name}"
+                           type="text">
+                    <p class="text-error"
+                       th:errors="*{name}"
                        th:if="${#fields.hasErrors('name')}"></p>
                 </div>
             </div>
 
+            <!-- Category Field -->
             <div class="input-block">
-                <label for="category">category</label>
+                <label for="category">Category</label>
                 <div class="input-row">
-                    <select id="category" th:field="${productDto.category}">
-                        <option value="other">other</option>
-                        <option value="phone">phone</option>
-                        <option value="computer">computer</option>
-                        <option value="accessory">accessory</option>
-                        <option value="printer">printer</option>
-                        <option value="camera">camera</option>
+                    <select id="category" th:errorclass="is-invalid"
+                            th:field="*{category}">
+                        <option value="">Select a category</option>
+                        <option value="PHONE">Phone</option>
+                        <option value="COMPUTER">Computer</option>
+                        <option value="ACCESSORY">Accessory</option>
+                        <option value="PRINTER">Printer</option>
+                        <option value="CAMERA">Camera</option>
+                        <option value="OTHER">Other</option>
                     </select>
-                    <p th:errorClass="text-error" th:errors="${productDto.category}"
+                    <p class="text-error"
+                       th:errors="*{category}"
                        th:if="${#fields.hasErrors('category')}"></p>
                 </div>
             </div>
 
+            <!-- Price Field -->
             <div class="input-block">
-                <label for="price">price</label>
+                <label for="price">Price</label>
                 <div class="input-row">
-                    <input id="price" step="0.01" th:field="${productDto.price}" type="number">
-                    <p th:errorClass="text-error" th:errors="${productDto.price}"
+                    <input id="price" step="0.01" th:errorclass="is-invalid"
+                           th:field="*{price}"
+                           type="number">
+                    <p class="text-error"
+                       th:errors="*{price}"
                        th:if="${#fields.hasErrors('price')}"></p>
                 </div>
             </div>
 
+            <!-- Description Field -->
             <div class="input-block">
-                <label for="description">description</label>
+                <label for="description">Description</label>
                 <div class="input-row">
-                    <input id="description" th:field="${productDto.description}">
-                    <p th:errorClass="text-error" th:errors="${productDto.description}"
+                    <textarea id="description" rows="4"
+                              th:errorclass="is-invalid"
+                              th:field="*{description}"></textarea>
+                    <p class="text-error"
+                       th:errors="*{description}"
                        th:if="${#fields.hasErrors('description')}"></p>
                 </div>
             </div>
 
+            <!-- Image Upload Field -->
             <div class="input-block">
-                <label>image</label>
+                <label for="imageFile">Product Image</label>
                 <div class="input-row">
-                    <input th:field="${productDto.imageFile}" type="file">
-                    <p th:errorClass="text-error" th:errors="${productDto.imageFile}"
+                    <input accept="image/*" id="imageFile"
+                           name="imageFile"
+                           onchange="previewImage(this)"
+                           type="file">
+                    <p class="text-error"
+                       th:errors="*{imageFile}"
                        th:if="${#fields.hasErrors('imageFile')}"></p>
+
+                    <!-- Image Preview -->
+                    <img alt="Image Preview" class="image-preview"
+                         id="imagePreview"
+                         style="display:none;">
                 </div>
             </div>
 
+            <!-- Form Actions -->
             <div class="input-block">
                 <div class="grid">
-                    <button class="button" type="submit">submit</button>
-                    <button class="button" type="reset">cancel</button>
+                    <button class="button primary" type="submit">Submit</button>
+                    <button class="button secondary" type="reset">Reset</button>
                 </div>
             </div>
         </form>
     </div>
 </div>
+
+<script>
+    function previewImage(input) {
+        const preview = document.getElementById('imagePreview');
+        const file = input.files[0];
+
+        if (file) {
+            const reader = new FileReader();
+
+            reader.onload = function(e) {
+                preview.src = e.target.result;
+                preview.style.display = 'block';
+            }
+
+            reader.readAsDataURL(file);
+        } else {
+            preview.style.display = 'none';
+        }
+    }
+</script>
 </body>
 </html>

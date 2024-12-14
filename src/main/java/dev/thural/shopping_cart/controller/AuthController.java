@@ -4,55 +4,65 @@ import dev.thural.shopping_cart.model.RegistrationDto;
 import dev.thural.shopping_cart.service.UserService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 
+@Controller
+@RequestMapping("/auth")
 @RequiredArgsConstructor
 public class AuthController {
+
     private final UserService userService;
 
     @GetMapping("/register")
-    public String requestRegistration(Model model) {
-        var registrationDto = new RegistrationDto();
-        model.addAttribute(registrationDto);
+    public String showRegistrationForm(Model model) {
+        model.addAttribute("registrationDto", new RegistrationDto());
         return "authentication/signup";
     }
 
     @PostMapping("/register")
-    public String register(@Valid @ModelAttribute RegistrationDto dto, Model model, BindingResult result) {
-        if (!dto.getPassword().equals(dto.getConfirmPassword()))
-            result.addError(new FieldError(
-                    "registrationDto",
+    public String registerUser(
+            @Valid @ModelAttribute("registrationDto") RegistrationDto dto,
+            BindingResult bindingResult,
+            Model model
+    ) {
+        // Custom validation for password match
+        if (!dto.getPassword().equals(dto.getConfirmPassword())) {
+            bindingResult.rejectValue(
                     "confirmPassword",
-                    "passwords mismatch"
-            ));
+                    "error.passwordMismatch",
+                    "Passwords do not match"
+            );
+        }
 
-        if (userService.isDuplicateEmail(dto.getEmail()))
-            result.addError(new FieldError(
-                    "registrationDto",
+        // Check for duplicate email
+        if (userService.isDuplicateEmail(dto.getEmail())) {
+            bindingResult.rejectValue(
                     "email",
-                    "email is already used"
-            ));
+                    "error.duplicateEmail",
+                    "Email is already in use"
+            );
+        }
 
-        if (!result.hasErrors()) return "authentication/signup";
+        // If there are validation errors, return to the form
+        if (bindingResult.hasErrors()) {
+            return "authentication/signup";
+        }
 
         try {
             userService.createUser(dto);
-            model.addAttribute("registerDto", new RegistrationDto());
-            model.addAttribute("success", true);
+            return "redirect:/auth/register?success";
         } catch (Exception e) {
-            result.addError(new FieldError(
-                    "registrationDto",
-                    "account",
-                    e.getMessage()
-            ));
+            bindingResult.reject(
+                    "error.registrationFailed",
+                    "Registration could not be completed"
+            );
+            return "authentication/signup";
         }
-        return "authentication/signup";
     }
-
-
 }

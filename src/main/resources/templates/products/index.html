@@ -3,43 +3,64 @@
 <head>
     <meta charset="UTF-8">
     <title>Products List</title>
-    <button class="button primary" onclick="window.location.href='/products/create';">add product</button>
-    <table class="products table">
-        <thead>
-        <tr>
-            <th>id</th>
-            <th>name</th>
-            <th>brand</th>
-            <th>category</th>
-            <th>price</th>
-            <th>image</th>
-            <th>date</th>
-            <th>action</th>
-        </tr>
-        </thead>
-        <tbody>
-        <tr th:each="product:${products}">
-            <td th:text="${product.id}"></td>
-            <td th:text="${product.name}"></td>
-            <td th:text="${product.brand}"></td>
-            <td th:text="${product.category}"></td>
-            <td th:text="${product.price}"></td>
-            <td>
-                <img alt="product image" th:src="@{'/images/' + ${product.imageFileName}}" width="6rem">
-            </td>
-            <td th:text="${product.createDate.toString()}"></td>
-            <td style="white-space:nowrap">
-                <button class="" th:href="@{products/edit(id=${product.id})}">edit</button>
-                <button class="" onclick="return confirm('are you sure?')"
-                        th:href="@{products/delete(id=${product.id})}"
-                >delete
-                </button>
-            </td>
-        </tr>
-        </tbody>
-    </table>
+    <style>
+        .button {
+            /* Add button styles here */
+        }
+        .primary {
+            /* Add primary button styles here */
+        }
+        .products {
+            /* Add table styles here */
+        }
+        .table {
+            /* Add additional table styles here */
+        }
+        td {
+            /* Add general table cell styles here */
+        }
+        .nowrap {
+            white-space: nowrap;
+        }
+        img {
+            width: 6rem; /* Set image width */
+        }
+    </style>
 </head>
 <body>
-
+<button class="button primary" onclick="window.location.href='/products/create';">Add Product</button>
+<table class="products table">
+    <thead>
+    <tr>
+        <th>ID</th>
+        <th>Name</th>
+        <th>Brand</th>
+        <th>Category</th>
+        <th>Price</th>
+        <th>Image</th>
+        <th>Date</th>
+        <th>Action</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="product:${products}">
+        <td th:text="${product.id}"></td>
+        <td th:text="${product.name}"></td>
+        <td th:text="${product.brand}"></td>
+        <td th:text="${product.category}"></td>
+        <td th:text="${product.price}"></td>
+        <td>
+            <img alt="Product Image" th:src="@{'/images/' + ${product.imageFileName}}">
+        </td>
+        <td th:text="${product.createDate.toString()}"></td>
+        <td class="nowrap">
+            <button th:href="@{products/edit(id=${product.id})}">Edit</button>
+            <button onclick="return confirm('Are you sure?')"
+                    th:href="@{products/delete(id=${product.id})}">Delete
+            </button>
+        </td>
+    </tr>
+    </tbody>
+</table>
 </body>
 </html>

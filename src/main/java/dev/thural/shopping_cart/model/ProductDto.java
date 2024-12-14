@@ -1,33 +1,33 @@
 package dev.thural.shopping_cart.model;
 
-import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.DecimalMin;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
-import lombok.*;
+import lombok.Data;
 import org.springframework.web.multipart.MultipartFile;
 
-@Getter
-@Setter
-@Builder
-@NoArgsConstructor
-@AllArgsConstructor
-public class ProductDto {
+import java.math.BigDecimal;
 
-    @NotBlank(message = "product name required")
+
+@Data
+public class ProductDto {
+    @NotBlank(message = "Product name is required")
     private String name;
 
-    @NotBlank(message = "product brand required")
-    private String brand;
+    @NotNull(message = "Price is required")
+    @DecimalMin(value = "0.01", message = "Price must be greater than zero")
+    private BigDecimal price;
 
-    @NotBlank(message = "product category required")
+    @NotBlank(message = "Category is required")
     private String category;
 
-    @Min(value = 0, message = "invalid price value")
-    private Double price;
-
-    @Size(min = 1, max = 900, message = "at least 1 and max 900 characters expected")
+    @Size(max = 500, message = "Description cannot exceed 500 characters")
     private String description;
 
+    @NotNull(message = "Product image is required")
+    @Size(max = 5242880, message = "File size must be less than 5MB")
     private MultipartFile imageFile;
 
+    private String imageFileName;
 }
