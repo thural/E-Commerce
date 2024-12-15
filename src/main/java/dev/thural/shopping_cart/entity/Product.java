@@ -8,6 +8,8 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.experimental.SuperBuilder;
 
+import java.math.BigDecimal;
+
 @Entity
 @Getter
 @Setter
@@ -17,7 +19,7 @@ import lombok.experimental.SuperBuilder;
 public class Product extends BaseEntity {
     private String name;
     private String brand;
-    private Double price;
+    private BigDecimal price;
     private String category;
     private String imageFileName;
 

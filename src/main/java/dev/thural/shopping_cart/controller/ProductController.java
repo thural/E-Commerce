@@ -1,9 +1,13 @@
 package dev.thural.shopping_cart.controller;
 
 import dev.thural.shopping_cart.entity.Product;
+import dev.thural.shopping_cart.model.Cart;
 import dev.thural.shopping_cart.model.ProductDto;
+import dev.thural.shopping_cart.service.CartService;
 import dev.thural.shopping_cart.service.FileStorageService;
 import dev.thural.shopping_cart.service.ProductService;
+import jakarta.persistence.EntityNotFoundException;
+import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -22,14 +26,38 @@ import java.util.Optional;
 @RequiredArgsConstructor
 @RequestMapping("/products")
 public class ProductController {
+    private final CartService cartService;
     private final ProductService productService;
     private final FileStorageService fileStorageService;
 
     @GetMapping
-    public String listProducts(Model model) {
+    public String listProducts(Model model, HttpSession session) {
         List<Product> products = productService.getAll();
+
+        Cart cart = cartService.getCart(session);
+        model.addAttribute("cart", cart);
+
         model.addAttribute("products", products);
         return "products/index";
+    }
+
+    @GetMapping("/productDetails/{productId}")
+    public String showProductDetails(@PathVariable Long productId, Model model, HttpSession session) {
+        Product product = productService.getProductById(productId)
+                .orElseThrow(EntityNotFoundException::new);
+        Cart cart = cartService.getCart(session);
+        model.addAttribute("product", product);
+        model.addAttribute("cart", cart);
+        return "productDetails";
+    }
+
+    @PostMapping("/addToCart")
+    public String addToCart(@RequestParam Long productId, HttpSession session) {
+        Product product = productService.getProductById(productId)
+                .orElseThrow(EntityNotFoundException::new);
+        Cart cart = cartService.getCart(session);
+        cartService.addItemToCart(cart, product, session);
+        return "redirect:/products";
     }
 
     @GetMapping("/create")
