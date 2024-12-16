@@ -4,7 +4,7 @@ import dev.thural.shopping_cart.entity.Product;
 import lombok.Data;
 
 @Data
-public class CartItem {
+public class CartItemDto {
     private Product product;
     private Integer quantity;
 }

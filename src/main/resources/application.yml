@@ -40,7 +40,9 @@ logging:
     org.hibernate.orm.jdbc.bind: ERROR
     dev.thural.shopping-cart.service: INFO
     org.springframework.security: INFO
-    org.hibernate.sql: ERROR
+    org.hibernate:
+      sql: DEBUG
+      type.descriptor.sql.BasicBinder: TRACE
     org.springframework.web.servlet.handler.HandlerMappingIntrospector: ERROR
   logback:
     rollingpolicy:

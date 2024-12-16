@@ -1,7 +1,7 @@
 package dev.thural.shopping_cart.controller;
 
 import dev.thural.shopping_cart.entity.Product;
-import dev.thural.shopping_cart.model.Cart;
+import dev.thural.shopping_cart.model.CartDto;
 import dev.thural.shopping_cart.model.ProductDto;
 import dev.thural.shopping_cart.service.CartService;
 import dev.thural.shopping_cart.service.FileStorageService;
@@ -34,7 +34,7 @@ public class ProductController {
     public String listProducts(Model model, HttpSession session) {
         List<Product> products = productService.getAll();
 
-        Cart cart = cartService.getCart(session);
+        CartDto cart = cartService.getCart(session);
         model.addAttribute("cart", cart);
 
         model.addAttribute("products", products);
@@ -45,7 +45,7 @@ public class ProductController {
     public String showProductDetails(@PathVariable Long productId, Model model, HttpSession session) {
         Product product = productService.getProductById(productId)
                 .orElseThrow(EntityNotFoundException::new);
-        Cart cart = cartService.getCart(session);
+        CartDto cart = cartService.getCart(session);
         model.addAttribute("product", product);
         model.addAttribute("cart", cart);
         return "productDetails";
@@ -55,7 +55,7 @@ public class ProductController {
     public String addToCart(@RequestParam Long productId, HttpSession session) {
         Product product = productService.getProductById(productId)
                 .orElseThrow(EntityNotFoundException::new);
-        Cart cart = cartService.getCart(session);
+        CartDto cart = cartService.getCart(session);
         cartService.addItemToCart(cart, product, session);
         return "redirect:/products";
     }

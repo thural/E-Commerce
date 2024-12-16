@@ -1,13 +1,13 @@
 package dev.thural.shopping_cart.service;
 
 import dev.thural.shopping_cart.entity.Product;
-import dev.thural.shopping_cart.model.Cart;
+import dev.thural.shopping_cart.model.CartDto;
 import jakarta.servlet.http.HttpSession;
 
 public interface CartService {
 
-    Cart getCart(HttpSession session);
+    CartDto getCart(HttpSession session);
 
-    void addItemToCart(Cart cart, Product product, HttpSession session);
+    void addItemToCart(CartDto cart, Product product, HttpSession session);
 
 }

@@ -1,8 +1,8 @@
 package dev.thural.shopping_cart.service.impl;
 
 import dev.thural.shopping_cart.entity.Product;
-import dev.thural.shopping_cart.model.Cart;
-import dev.thural.shopping_cart.model.CartItem;
+import dev.thural.shopping_cart.model.CartDto;
+import dev.thural.shopping_cart.model.CartItemDto;
 import dev.thural.shopping_cart.service.CartService;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
@@ -12,17 +12,17 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class CartServiceImpl implements CartService {
 
-    public Cart getCart(HttpSession session) {
-        Cart cart = (Cart) session.getAttribute("cart");
+    public CartDto getCart(HttpSession session) {
+        CartDto cart = (CartDto) session.getAttribute("cart");
         if (cart == null) {
-            cart = new Cart();
+            cart = new CartDto();
             session.setAttribute("cart", cart);
         }
         return cart;
     }
 
-    public void addItemToCart(Cart cart, Product product, HttpSession session) {
-        CartItem existingCartItem = cart.getItems().stream()
+    public void addItemToCart(CartDto cart, Product product, HttpSession session) {
+        CartItemDto existingCartItem = cart.getItems().stream()
                 .filter(item -> item.getProduct().getId().equals(product.getId()))
                 .findFirst()
                 .orElse(null);
@@ -32,7 +32,7 @@ public class CartServiceImpl implements CartService {
             existingCartItem.setQuantity(existingCartItem.getQuantity() + 1);
         } else {
             // Product is not in the cart, create a new CartItem
-            CartItem cartItem = new CartItem();
+            CartItemDto cartItem = new CartItemDto();
             cartItem.setProduct(product);
             cartItem.setQuantity(1);
             cart.getItems().add(cartItem);
