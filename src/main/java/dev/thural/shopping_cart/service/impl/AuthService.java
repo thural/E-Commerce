@@ -1,6 +1,5 @@
 package dev.thural.shopping_cart.service.impl;
 
-import dev.thural.shopping_cart.emums.RoleType;
 import dev.thural.shopping_cart.entity.User;
 import dev.thural.shopping_cart.model.RegistrationDto;
 import dev.thural.shopping_cart.repository.UserRepository;
@@ -13,12 +12,10 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
-
 @Slf4j
 @Service
 @RequiredArgsConstructor
-public class AuthenticationService implements UserDetailsService {
+public class AuthService implements UserDetailsService {
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
     private final UserDetailsService userDetailsService;
@@ -31,12 +28,11 @@ public class AuthenticationService implements UserDetailsService {
 
     @Transactional
     public User registerNewUser(RegistrationDto dto) {
-        if (isUsernameAvailable(dto.getUsername())) {
+        if (!isUsernameAvailable(dto.getUsername())) {
             log.error("Username already exists: {}", dto.getUsername());
             throw new IllegalArgumentException("Username already exists");
         }
-
-        if (isEmailAvailable(dto.getEmail())) {
+        if (!isEmailAvailable(dto.getEmail())) {
             log.error("Email already exists: {}", dto.getEmail());
             throw new IllegalArgumentException("Email already exists");
         }
@@ -44,7 +40,8 @@ public class AuthenticationService implements UserDetailsService {
         User newUser = new User();
         newUser.setUsername(dto.getUsername());
         newUser.setEmail(dto.getEmail());
-        newUser.setRoles(List.of(RoleType.USER));
+        newUser.setFirstname(dto.getFirstname());
+        newUser.setLastname(dto.getLastname());
         newUser.setPassword(passwordEncoder.encode(dto.getPassword()));
         User savedUser = userRepository.save(newUser);
         log.info("User registered successfully: {}", savedUser.getUsername());
