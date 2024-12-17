@@ -3,29 +3,23 @@ package dev.thural.shopping_cart.service.impl;
 import dev.thural.shopping_cart.entity.User;
 import dev.thural.shopping_cart.model.RegistrationDto;
 import dev.thural.shopping_cart.repository.UserRepository;
+import dev.thural.shopping_cart.service.AuthService;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+
+import static dev.thural.shopping_cart.emums.Role.USER;
 
 @Slf4j
 @Service
 @RequiredArgsConstructor
-public class AuthService implements UserDetailsService {
+public class AuthServiceImpl implements AuthService {
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
-    private final UserDetailsService userDetailsService;
 
     @Override
-    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        log.info("Attempting to load user by username or email: {}", username);
-        return userDetailsService.loadUserByUsername(username);
-    }
-
     @Transactional
     public User registerNewUser(RegistrationDto dto) {
         if (!isUsernameAvailable(dto.getUsername())) {
@@ -42,12 +36,14 @@ public class AuthService implements UserDetailsService {
         newUser.setEmail(dto.getEmail());
         newUser.setFirstname(dto.getFirstname());
         newUser.setLastname(dto.getLastname());
+        newUser.setRole(USER);
         newUser.setPassword(passwordEncoder.encode(dto.getPassword()));
         User savedUser = userRepository.save(newUser);
         log.info("User registered successfully: {}", savedUser.getUsername());
         return savedUser;
     }
 
+    @Override
     @Transactional
     public User updateUserProfile(User existingUser, User updatedUserDetails) {
         existingUser.setFirstname(updatedUserDetails.getFirstname());
@@ -63,6 +59,7 @@ public class AuthService implements UserDetailsService {
         return userRepository.save(existingUser);
     }
 
+    @Override
     @Transactional
     public void changePassword(User user, String newPassword) {
         String encodedPassword = passwordEncoder.encode(newPassword);

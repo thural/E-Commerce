@@ -1,7 +1,7 @@
 package dev.thural.shopping_cart.controller;
 
 import dev.thural.shopping_cart.model.RegistrationDto;
-import dev.thural.shopping_cart.service.impl.AuthService;
+import dev.thural.shopping_cart.service.impl.AuthServiceImpl;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -17,7 +17,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 @RequiredArgsConstructor
 public class AuthController {
 
-    private final AuthService authService;
+    private final AuthServiceImpl authService;
 
     @GetMapping("/login")
     public String loginPage() {

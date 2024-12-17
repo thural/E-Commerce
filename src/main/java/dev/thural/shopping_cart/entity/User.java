@@ -1,8 +1,7 @@
 package dev.thural.shopping_cart.entity;
 
-import dev.thural.shopping_cart.emums.RoleType;
+import dev.thural.shopping_cart.emums.Role;
 import jakarta.persistence.Column;
-import jakarta.persistence.ElementCollection;
 import jakarta.persistence.Entity;
 import jakarta.persistence.PrePersist;
 import jakarta.validation.constraints.NotBlank;
@@ -13,14 +12,11 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.experimental.SuperBuilder;
 import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.security.Principal;
 import java.time.OffsetDateTime;
 import java.util.Collection;
-import java.util.List;
-import java.util.stream.Collectors;
 
 @Entity
 @Getter
@@ -52,15 +48,12 @@ public class User extends BaseEntity implements UserDetails, Principal {
     private boolean enabled;
 
 
-    @ElementCollection
-    private List<RoleType> roles;
+    @NotNull
+    private Role role;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return this.roles
-                .stream()
-                .map(r -> new SimpleGrantedAuthority(r.name()))
-                .collect(Collectors.toList());
+        return this.role.getAuthorities();
     }
 
     @Override
@@ -108,9 +101,8 @@ public class User extends BaseEntity implements UserDetails, Principal {
 
     @PrePersist
     void initAccount() {
-        setEnabled(false);
+        setEnabled(true);
         setAccountLocked(false);
-        setRoles(List.of(RoleType.USER));
     }
 
 }

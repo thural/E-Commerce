@@ -1,5 +1,6 @@
 package dev.thural.shopping_cart.config;
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -7,6 +8,7 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.web.SecurityFilterChain;
 
+@Slf4j
 @Configuration
 @EnableWebSecurity
 public class SecurityConfig {
@@ -31,6 +33,10 @@ public class SecurityConfig {
                         .loginPage("/login")
                         .defaultSuccessUrl("/products", true)
                         .failureUrl("/login?error=true")
+                        .failureHandler((request, response, exception) -> {
+                            log.error("Login failed: {}", exception.getMessage());
+                            response.sendRedirect("/login?error=true");
+                        })
                         .permitAll()
                 )
                 .logout(logout -> logout
