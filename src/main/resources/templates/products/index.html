@@ -1,67 +1,49 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html
+        lang="en"
+        th:replace="~{layout :: layout(~{::title}, ~{::section})}"
+        xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity6"
+        xmlns:th="http://www.thymeleaf.org"
+>
 <head>
     <meta charset="UTF-8">
     <title>Products List</title>
-    <a class="logout-link" th:href="@{/logout}">Logout</a>
-    <style>
-        .button {
-            /* Add button styles here */
-        }
-        .primary {
-            /* Add primary button styles here */
-        }
-        .products {
-            /* Add table styles here */
-        }
-        .table {
-            /* Add additional table styles here */
-        }
-        td {
-            /* Add general table cell styles here */
-        }
-        .nowrap {
-            white-space: nowrap;
-        }
-        img {
-            width: 6rem; /* Set image width */
-        }
-    </style>
+    <link rel="stylesheet" th:href="@{/css/products.css}">
 </head>
 <body>
-<button class="button primary" onclick="window.location.href='/products/create';">Add Product</button>
-<table class="products table">
-    <thead>
-    <tr>
-        <th>ID</th>
-        <th>Name</th>
-        <th>Brand</th>
-        <th>Category</th>
-        <th>Price</th>
-        <th>Image</th>
-        <th>Date</th>
-        <th>Action</th>
-    </tr>
-    </thead>
-    <tbody>
-    <tr th:each="product:${products}">
-        <td th:text="${product.id}"></td>
-        <td th:text="${product.name}"></td>
-        <td th:text="${product.brand}"></td>
-        <td th:text="${product.category}"></td>
-        <td th:text="${product.price}"></td>
-        <td>
-            <img alt="Product Image" th:src="@{'/images/' + ${product.imageFileName}}">
-        </td>
-        <td th:text="${product.createDate.toString()}"></td>
-        <td class="nowrap">
-            <button th:href="@{products/edit(id=${product.id})}">Edit</button>
-            <button onclick="return confirm('Are you sure?')"
-                    th:href="@{products/delete(id=${product.id})}">Delete
-            </button>
-        </td>
-    </tr>
-    </tbody>
-</table>
+<section>
+    <!-- Add Product Button -->
+    <form method="get" sec:authorize="hasAnyRole('ADMIN', 'MANAGER')"
+          th:action="@{/products/create}">
+        <div th:replace="~{fragments/components :: button('Add Product', '/products/create', 'button button-primary')}"></div>
+    </form>
+
+    <!-- Admin/Manager Special Actions -->
+    <div th:replace="~{fragments/product-components :: product-admin-actions}"></div>
+
+    <!-- Product Table -->
+    <table class="products table">
+        <thead>
+        <tr>
+            <th>ID</th>
+            <th>Name</th>
+            <th>Brand</th>
+            <th>Category</th>
+            <th>Price</th>
+            <th>Image</th>
+            <th>Date</th>
+            <th>Action</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="product : ${products}"
+            th:replace="~{fragments/product-components :: product}">
+        </tr>
+        </tbody>
+    </table>
+</section>
+
+<!-- Optional: Page-specific JavaScript -->
+<script th:src="@{/js/products.js}"></script>
 </body>
 </html>

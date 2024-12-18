@@ -1,0 +1,9 @@
+<div th:fragment="button-with-onclick(text, url, cssClass, onclick)" th:inline="text"
+     xmlns:th="http://www.thymeleaf.org">
+    <button
+            th:class="${cssClass}"
+            th:onclick="${onclick}"
+            th:text="${text}">
+        [[${text}]]
+    </button>
+</div>

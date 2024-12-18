@@ -1,0 +1,11 @@
+<!-- Delete Button Fragment with Confirmation -->
+<div th:fragment="delete-button(id)"
+     xmlns:th="http://www.thymeleaf.org">
+    >
+    <button
+            class="btn btn-danger"
+            onclick="return confirm('Are you sure you want to delete this product?');"
+            th:onclick="|return confirm('Are you sure you want to delete this product?') && window.location.href='@{products/delete(id=${id})}'|">
+        Delete
+    </button>
+</div>

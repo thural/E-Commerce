@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+
+<html
+        lang="en" th:fragment="layout(title, content)"
+        xmlns:th="http://www.thymeleaf.org"
+>
+
+<head>
+    <meta charset="UTF-8">
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+    <title th:replace="${title}">Default Title</title>
+    <!-- Common CSS -->
+    <link rel="stylesheet" th:href="@{/css/main.css}">
+    <!-- Additional page-specific CSS can be added by child templates -->
+    <th:block th:replace="${content instanceof String} ? ~{} : ~{:: link}"/>
+</head>
+
+<body>
+<!-- Navbar Fragment -->
+<div th:replace="~{fragments/navbar :: navbar}"></div>
+
+<!-- Main Content Container -->
+<div class="container">
+    <!-- Page-specific content will be inserted here -->
+    <th:block th:replace="${content}"></th:block>
+</div>
+
+<!-- Footer Fragment -->
+<div th:replace="~{fragments/footer :: footer}"></div>
+
+<!-- Common JavaScript -->
+<script th:src="@{/js/main.js}"></script>
+
+<!-- Additional page-specific scripts can be added by child templates -->
+<th:block th:replace="${content instanceof String} ? ~{} : ~{:: script}"/>
+</body>
+
+</html>

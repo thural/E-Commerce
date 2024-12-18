@@ -1,0 +1,21 @@
+        .button {
+            /* Add button styles here */
+        }
+        .primary {
+            /* Add primary button styles here */
+        }
+        .products {
+            /* Add table styles here */
+        }
+        .table {
+            /* Add additional table styles here */
+        }
+        td {
+            /* Add general table cell styles here */
+        }
+        .nowrap {
+            white-space: nowrap;
+        }
+        img {
+            width: 6rem; /* Set image width */
+        }

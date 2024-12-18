@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<body>
+<!-- Read-only ID Field Fragment -->
+<div class="form-group" th:fragment="readonly-id-field (label, field, helpText)">
+    <label th:for="${field}" th:text="${label}">ID</label>
+    <input
+            class="form-control"
+            readonly
+            th:aria-describedby="${field + '-help'}"
+            th:id="${field}"
+            th:value="*{__${field}__}"
+            type="text">
+    <small class="form-text text-muted"
+           th:id="${field + '-help'}"
+           th:text="${helpText}">
+        Field help text
+    </small>
+</div>
+
+<!-- Enhanced Input Field Fragment -->
+<div class="form-group" th:fragment="input-field (label, field, type, options)">
+    <label th:for="${field}" th:text="${label}">Field Label</label>
+
+    <input class="form-control"
+           th:aria-describedby="${field + '-error'}"
+           th:classappend="${#fields.hasErrors(field)} ? 'is-invalid' : ''"
+           th:field="*{__${field}__}"
+           th:id="${field}"
+           th:if="${type == 'text'}"
+           type="text">
+
+    <input class="form-control"
+           th:aria-describedby="${field + '-error'}"
+           th:attr="min=${options?.min ?: 0},step=${options?.step ?: 1}"
+           th:classappend="${#fields.hasErrors(field)} ? 'is-invalid' : ''"
+           th:field="*{__${field}__}"
+           th:id="${field}"
+           th:if="${type == 'number'}"
+           type="number">
+
+    <select class="form-control"
+            th:aria-describedby="${field + '-error'}"
+            th:classappend="${#fields.hasErrors(field)} ? 'is-invalid' : ''"
+            th:field="*{__${field}__}"
+            th:id="${field}"
+            th:if="${type == 'select'}">
+        <option th:each="option : ${options.items}"
+                th:text="${option.label}"
+                th:value="${option.value}"></option>
+    </select>
+
+    <textarea class="form-control"
+              rows="${options?.rows ?: 4}"
+              th:aria-describedby="${field + '-error'}"
+              th:classappend="${#fields.hasErrors(field)} ? 'is-invalid' : ''"
+              th:field="*{__${field}__}"
+              th:id="${field}"
+              th:if="${type == 'textarea'}"></textarea>
+
+    <div class="invalid-feedback"
+         th:errors="*{__${field}__}"
+         th:id="${field + '-error'}"
+         th:if="${#fields.hasErrors(field)}"></div>
+</div>
+
+<!-- Image Preview Fragment -->
+<div class="form-group" th:fragment="image-preview (label, imageUrl)">
+    <label th:text="${label}">Current Image</label>
+    <div class="image-preview">
+        <img alt="Current Product Image"
+             class="img-fluid"
+             th:src="${imageUrl}">
+    </div>
+</div>
+
+<!-- File Input Fragment -->
+<div class="form-group" th:fragment="file-input-field (label, field)">
+    <label th:for="${field}" th:text="${label}">Upload Image</label>
+    <input
+            class="form-control-file"
+            th:aria-describedby="${field + '-error'}"
+            th:classappend="${#fields.hasErrors(field)} ? 'is-invalid' : ''"
+            th:field="*{__${field}__}"
+            th:id="${field}"
+            type="file">
+    <div class="invalid-feedback"
+         th:errors="*{__${field}__}"
+         th:id="${field + '-error'}"
+         th:if="${#fields.hasErrors(field)}"></div>
+</div>
+
+<!-- Form Actions Fragment -->
+<div class="form-actions" th:fragment="form-actions (submitLabel, cancelLabel)">
+    <button class="btn btn-primary"
+            th:text="${submitLabel}"
+            type="submit">
+        Submit
+    </button>
+    <button class="btn btn-secondary"
+            th:text="${cancelLabel}"
+            type="reset">
+        Cancel
+    </button>
+</div>
+</body>
+</html>

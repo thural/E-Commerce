@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity6"
+      xmlns:th="http://www.thymeleaf.org">
+<body>
+
+<!-- Product Row Fragment -->
+<tr th:fragment="product" th:object="${product}">
+    <td th:text="*{id}"></td>
+    <td th:text="*{name}"></td>
+    <td th:text="*{brand}"></td>
+    <td th:text="*{category}"></td>
+    <td th:text="*{price}"></td>
+    <td>
+        <img alt="Product Image" th:src="@{'/images/' + *{imageFileName}}">
+    </td>
+    <td th:text="*{createDate.toString()}"></td>
+    <td class="nowrap" sec:authorize="hasAnyRole('ADMIN', 'MANAGER')">
+        <div th:replace="~{components :: button('Edit', @{products/edit(id=*{id})}, 'btn btn-primary')}"></div>
+        <div th:replace="~{components :: delete-button(*{id})}"></div>
+    </td>
+</tr>
+
+<!-- Product Admin Actions Fragment -->
+<div th:fragment="product-admin-actions">
+    <div sec:authorize="hasRole('ADMIN')">
+        <button class="btn btn-danger">Admin Special Action</button>
+    </div>
+    <div sec:authorize="hasRole('MANAGER')">
+        <button class="btn btn-warning">Manager Special Action</button>
+    </div>
+</div>
+
+</body>
+</html>

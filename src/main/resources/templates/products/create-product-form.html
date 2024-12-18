@@ -4,187 +4,50 @@
     <meta charset="UTF-8">
     <meta content="width=device-width, initial-scale=1.0" name="viewport">
     <title>Create Product</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            line-height: 1.6;
-            max-width: 600px;
-            margin: 0 auto;
-            padding: 1rem;
-        }
-
-        .input-block {
-            margin-bottom: 1rem;
-        }
-
-        .input-row {
-            display: flex;
-            flex-direction: column;
-        }
-
-        label {
-            margin-bottom: 0.5rem;
-            font-weight: bold;
-        }
-
-        input, select, textarea {
-            width: 100%;
-            padding: 0.5rem;
-            border: 1px solid #ccc;
-            border-radius: 4px;
-        }
-
-        .text-error {
-            color: red;
-            font-size: 0.8rem;
-            margin-top: 0.25rem;
-        }
-
-        .button {
-            display: inline-block;
-            padding: 0.5rem 1rem;
-            background-color: #007bff;
-            color: white;
-            border: none;
-            border-radius: 4px;
-            cursor: pointer;
-            margin-right: 0.5rem;
-        }
-
-        .button.secondary {
-            background-color: #6c757d;
-        }
-
-        .image-preview {
-            max-width: 200px;
-            max-height: 200px;
-            margin-top: 0.5rem;
-        }
-    </style>
+    <link rel="stylesheet" th:href="@{/css/create-product.css}">
 </head>
 <body>
 <div class="container">
     <div class="center">
         <h1>Add New Product</h1>
 
-        <!-- Global Errors -->
-        <div class="alert error" th:if="${#fields.hasGlobalErrors()}">
-            <ul>
-                <li th:each="err : ${#fields.globalErrors()}" th:text="${err}"></li>
-            </ul>
-        </div>
+        <!-- Global Errors Fragment -->
+        <div th:replace="~{fragments/form :: global-errors}"></div>
 
         <form enctype="multipart/form-data"
               method="post"
               th:action="@{/products/create}"
               th:object="${productDto}">
 
-            <!-- Name Field -->
-            <div class="input-block">
-                <label for="name">Name</label>
-                <div class="input-row">
-                    <input id="name" th:errorclass="is-invalid" th:field="*{name}"
-                           type="text">
-                    <p class="text-error"
-                       th:errors="*{name}"
-                       th:if="${#fields.hasErrors('name')}"></p>
-                </div>
-            </div>
+            <!-- Name Field Fragment -->
+            <div th:replace="~{fragments/form :: input-field(label='Name', field='name', type='text', options=null)}"></div>
 
-            <!-- Category Field -->
-            <div class="input-block">
-                <label for="category">Category</label>
-                <div class="input-row">
-                    <select id="category" th:errorclass="is-invalid"
-                            th:field="*{category}">
-                        <option value="">Select a category</option>
-                        <option value="PHONE">Phone</option>
-                        <option value="COMPUTER">Computer</option>
-                        <option value="ACCESSORY">Accessory</option>
-                        <option value="PRINTER">Printer</option>
-                        <option value="CAMERA">Camera</option>
-                        <option value="OTHER">Other</option>
-                    </select>
-                    <p class="text-error"
-                       th:errors="*{category}"
-                       th:if="${#fields.hasErrors('category')}"></p>
-                </div>
-            </div>
+            <!-- Category Field Fragment -->
+            <div th:replace="~{fragments/form :: input-field(label='Category', field='category', type='select',
+                options=${{items: [
+                    {value: 'PHONE', label: 'Phone'},
+                    {value: 'COMPUTER', label: 'Computer'},
+                    {value: 'ACCESSORY', label: 'Accessory'},
+                    {value: 'PRINTER', label: 'Printer'},
+                    {value: 'CAMERA', label: 'Camera'},
+                    {value: 'OTHER', label: 'Other'}
+                ]}})"></div>
 
-            <!-- Price Field -->
-            <div class="input-block">
-                <label for="price">Price</label>
-                <div class="input-row">
-                    <input id="price" step="0.01" th:errorclass="is-invalid"
-                           th:field="*{price}"
-                           type="number">
-                    <p class="text-error"
-                       th:errors="*{price}"
-                       th:if="${#fields.hasErrors('price')}"></p>
-                </div>
-            </div>
+            <!-- Price Field Fragment -->
+            <div th:replace="~{fragments/form :: input-field(label='Price', field='price', type='number', options=${{step: '0.01'}})"></div>
 
-            <!-- Description Field -->
-            <div class="input-block">
-                <label for="description">Description</label>
-                <div class="input-row">
-                    <textarea id="description" rows="4"
-                              th:errorclass="is-invalid"
-                              th:field="*{description}"></textarea>
-                    <p class="text-error"
-                       th:errors="*{description}"
-                       th:if="${#fields.hasErrors('description')}"></p>
-                </div>
-            </div>
+            <!-- Description Field Fragment -->
+            <div th:replace="~{fragments/form :: input-field(label='Description', field='description', type='textarea', options=${{rows: 4}})"></div>
 
-            <!-- Image Upload Field -->
-            <div class="input-block">
-                <label for="imageFile">Product Image</label>
-                <div class="input-row">
-                    <input accept="image/*" id="imageFile"
-                           name="imageFile"
-                           onchange="previewImage(this)"
-                           type="file">
-                    <p class="text-error"
-                       th:errors="*{imageFile}"
-                       th:if="${#fields.hasErrors('imageFile')}"></p>
+            <!-- Image Upload Field Fragment -->
+            <div th:replace="~{fragments/form :: file-input-field(label='Product Image', field='imageFile')}"></div>
 
-                    <!-- Image Preview -->
-                    <img alt="Image Preview" class="image-preview"
-                         id="imagePreview"
-                         style="display:none;">
-                </div>
-            </div>
-
-            <!-- Form Actions -->
-            <div class="input-block">
-                <div class="grid">
-                    <button class="button primary" type="submit">Submit</button>
-                    <button class="button secondary" type="reset">Reset</button>
-                </div>
-            </div>
+            <!-- Form Actions Fragment -->
+            <div th:replace="~{fragments/form :: form-actions}"></div>
         </form>
     </div>
 </div>
 
-<script>
-    function previewImage(input) {
-        const preview = document.getElementById('imagePreview');
-        const file = input.files[0];
-
-        if (file) {
-            const reader = new FileReader();
-
-            reader.onload = function(e) {
-                preview.src = e.target.result;
-                preview.style.display = 'block';
-            }
-
-            reader.readAsDataURL(file);
-        } else {
-            preview.style.display = 'none';
-        }
-    }
-</script>
+<script th:src="@{/js/image-preview.js}"></script>
 </body>
 </html>
