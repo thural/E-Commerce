@@ -2,7 +2,6 @@
 <html
         lang="en"
         th:replace="~{layout :: layout(~{::title}, ~{::section})}"
-        xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity6"
         xmlns:th="http://www.thymeleaf.org"
 >
 <head>
@@ -12,12 +11,6 @@
 </head>
 <body>
 <section>
-    <!-- Add Product Button -->
-    <form method="get" sec:authorize="hasAnyRole('ADMIN', 'MANAGER')"
-          th:action="@{/products/create}">
-        <div th:replace="~{fragments/components :: button('Add Product', '/products/create', 'button button-primary')}"></div>
-    </form>
-
     <!-- Admin/Manager Special Actions -->
     <div th:replace="~{fragments/product-components :: product-admin-actions}"></div>
 
@@ -36,13 +29,16 @@
         </tr>
         </thead>
         <tbody>
+        <tr th:if="${products == null or products.isEmpty()}">
+            <td colspan="8">No products found</td>
+        </tr>
         <tr th:each="product : ${products}"
-            th:replace="~{fragments/product-components :: product}">
+            th:replace="~{fragments/product-components :: product-card}"
+        >
         </tr>
         </tbody>
     </table>
 </section>
-
 <!-- Optional: Page-specific JavaScript -->
 <script th:src="@{/js/products.js}"></script>
 </body>

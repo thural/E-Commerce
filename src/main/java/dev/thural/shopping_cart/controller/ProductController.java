@@ -33,10 +33,8 @@ public class ProductController {
     @GetMapping
     public String listProducts(Model model, HttpSession session) {
         List<Product> products = productService.getAll();
-
         CartDto cart = cartService.getCart(session);
         model.addAttribute("cart", cart);
-
         model.addAttribute("products", products);
         return "products/index";
     }

@@ -13,26 +13,26 @@
             type="text">
     <small class="form-text text-muted"
            th:id="${field + '-help'}"
-           th:text="${helpText}">
-        Field help text
-    </small>
+           th:text="${helpText}">Field help text</small>
 </div>
 
 <!-- Enhanced Input Field Fragment -->
 <div class="form-group" th:fragment="input-field (label, field, type, options)">
     <label th:for="${field}" th:text="${label}">Field Label</label>
 
-    <input class="form-control"
-           th:aria-describedby="${field + '-error'}"
-           th:classappend="${#fields.hasErrors(field)} ? 'is-invalid' : ''"
-           th:field="*{__${field}__}"
-           th:id="${field}"
-           th:if="${type == 'text'}"
-           type="text">
+    <label>
+        <input class="form-control"
+               th:aria-describedby="${field + '-error'}"
+               th:classappend="${#fields.hasErrors(field)} ? 'is-invalid' : ''"
+               th:field="*{__${field}__}"
+               th:id="${field}"
+               th:if="${type == 'text'}"
+               type="text">
+    </label>
 
     <input class="form-control"
            th:aria-describedby="${field + '-error'}"
-           th:attr="min=${options?.min ?: 0},step=${options?.step ?: 1}"
+           th:attr="min=${options?.min ?: 0}, step=${options?.step ?: 1}"
            th:classappend="${#fields.hasErrors(field)} ? 'is-invalid' : ''"
            th:field="*{__${field}__}"
            th:id="${field}"
@@ -94,13 +94,11 @@
 <div class="form-actions" th:fragment="form-actions (submitLabel, cancelLabel)">
     <button class="btn btn-primary"
             th:text="${submitLabel}"
-            type="submit">
-        Submit
+            type="submit">Submit
     </button>
     <button class="btn btn-secondary"
             th:text="${cancelLabel}"
-            type="reset">
-        Cancel
+            type="reset">Cancel
     </button>
 </div>
 </body>

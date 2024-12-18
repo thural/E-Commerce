@@ -4,14 +4,15 @@
 <body>
 
 <!-- Product Row Fragment -->
-<tr th:fragment="product" th:object="${product}">
+<tr th:fragment="product-card" th:if="${product != null}" th:object="${product}">
     <td th:text="*{id}"></td>
     <td th:text="*{name}"></td>
     <td th:text="*{brand}"></td>
     <td th:text="*{category}"></td>
     <td th:text="*{price}"></td>
     <td>
-        <img alt="Product Image" th:src="@{'/images/' + *{imageFileName}}">
+        <img alt="Product Image"
+             th:src="${product.imageFileName != null} ? @{'/images/' + *{imageFileName}} : @{'/images/default-product.png'}">
     </td>
     <td th:text="*{createDate.toString()}"></td>
     <td class="nowrap" sec:authorize="hasAnyRole('ADMIN', 'MANAGER')">
