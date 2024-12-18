@@ -20,7 +20,7 @@
 
     <form class="login-form" method="post" th:action="@{/login}">
         <!-- Add CSRF token if you've re-enabled CSRF protection -->
-        <!--        <input th:name="${_csrf.parameterName}" th:value="${_csrf.token}" type="hidden"/>-->
+        <input th:name="${_csrf.parameterName}" th:value="${_csrf.token}" type="hidden"/>
 
         <h2>Welcome Back</h2>
         <div class="form-group">

@@ -2,6 +2,8 @@ package dev.thural.shopping_cart.controller;
 
 import dev.thural.shopping_cart.model.RegistrationDto;
 import dev.thural.shopping_cart.service.impl.AuthServiceImpl;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -21,7 +23,13 @@ public class AuthController {
 
     @GetMapping("/login")
     public String loginPage() {
-        return "login"; // This should correspond to login.html in templates directory
+        return "login";
+    }
+
+    @PostMapping("/logout")
+    public String logout(HttpServletRequest request, HttpServletResponse response) {
+        authService.logout(request, response);
+        return "redirect:/login?logout";
     }
 
     @GetMapping("/register")

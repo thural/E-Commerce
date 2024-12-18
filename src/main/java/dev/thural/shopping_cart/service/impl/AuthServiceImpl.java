@@ -4,10 +4,15 @@ import dev.thural.shopping_cart.entity.User;
 import dev.thural.shopping_cart.model.RegistrationDto;
 import dev.thural.shopping_cart.repository.UserRepository;
 import dev.thural.shopping_cart.service.AuthService;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler;
 import org.springframework.stereotype.Service;
 
 import static dev.thural.shopping_cart.emums.Role.USER;
@@ -18,6 +23,8 @@ import static dev.thural.shopping_cart.emums.Role.USER;
 public class AuthServiceImpl implements AuthService {
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
+    private final HttpServletRequest request;
+    private final HttpServletResponse response;
 
     @Override
     @Transactional
@@ -41,6 +48,14 @@ public class AuthServiceImpl implements AuthService {
         User savedUser = userRepository.save(newUser);
         log.info("User registered successfully: {}", savedUser.getUsername());
         return savedUser;
+    }
+
+    @Override
+    public void logout(HttpServletRequest request, HttpServletResponse response) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if (authentication != null) {
+            new SecurityContextLogoutHandler().logout(request, response, authentication);
+        }
     }
 
     @Override
