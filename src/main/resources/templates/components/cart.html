@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+</head>
+<body>
+<div th:fragment="cart">
+    <link rel="stylesheet" th:href="@{/css/cart.css}">
+    <div class="cart-btn" onclick="toggleDisplay()">
+        <img alt="cart" th:src="@{/images/cart.svg}">
+        <div class="cart-badge" th:text="${cartItems != null ? #lists.size(cartItems) : 0}">0</div>
+    </div>
+
+    <div class="cart-bckg" onclick="toggleDisplay()"></div>
+
+    <div class="cart">
+        <h3>Shopping Cart</h3>
+        <div class="items">
+            <div class="item" th:each="item : ${cartItems}" th:id="'item-' + ${item.id}"
+                 th:if="${cartItems != null or !cartItems.isEmpty()}">
+                <div class="image">
+                    <img th:alt="${item.title}" th:src="${item.image}">
+                </div>
+                <div class="details">
+                    <h5 th:text="${item.title}">Product Title</h5>
+                    <p>$<span th:text="${item.price * item.count}">0.00</span></p>
+                    <div class="counter">
+                        <button th:onclick="'handleCart(' + ${item.id} + ', \'decrement\', ' + ${item.count} + ')'">-
+                        </button>
+                        <p th:text="${item.count}">0</p>
+                        <button th:onclick="'handleCart(' + ${item.id} + ', \'increment\', ' + ${item.count} + ')'">+
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <h3>total: $<span id="cartTotal"
+                          th:text="${cartItems != null ? #aggregates.sum(cartItems.![price * count]) : 0.00}">0.00</span>
+        </h3>
+        <div class="buttons">
+            <button onclick="checkout()">checkout</button>
+            <button onclick="toggleDisplay()">close</button>
+        </div>
+    </div>
+    <script th:src="@{/js/cart.js}"></script>
+</div>
+</body>
+</html>

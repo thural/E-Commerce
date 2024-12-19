@@ -1,0 +1,17 @@
+<!-- fragments/layout.html -->
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <link rel="stylesheet" th:href="@{/css/container.css}">
+</head>
+<body>
+<!-- Reusable container fragment -->
+<div th:fragment="container(content)" xmlns:th="http://www.thymeleaf.org">
+    <div class="custom-container">
+        <div class="custom-container__inner">
+            <th:block th:replace="${content}"></th:block>
+        </div>
+    </div>
+</div>
+</body>
+</html>

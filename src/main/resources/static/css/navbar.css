@@ -1,0 +1,62 @@
+.navbar {
+    top: 0;
+    gap: 2rem;
+    color: white;
+    width: 100%;
+    margin: 0px;
+    display: flex;
+    padding: 2vh 2rem;
+    list-style: none;
+    position: sticky;
+    flex-wrap: wrap;
+    font-size: 1.5rem;
+    box-sizing: border-box;
+    align-items: center;
+    font-weight: 400;
+    justify-content: space-between;
+    background-color: black;
+}
+
+nav {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 2rem;
+    margin-left: auto;
+}
+
+ul {
+    display: flex;
+    list-style: none;
+    justify-content: center;
+    padding: 0;
+    gap: 2rem;
+    margin: 0;
+    align-items: center;
+}
+
+.navbar-logo {
+    margin: 0;
+    color: bisque;
+    font-size: 2.5rem;
+    font-weight: 900;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen,
+        Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+}
+
+.navbar-user {
+    display: flex;
+    flex-flow: row;
+    justify-content: center;
+    align-items: center;
+    gap: .5rem;
+}
+
+li {
+    list-style: none;
+}
+
+a, a:hover, a:focus, a:active {
+    text-decoration: none;
+    color: inherit;
+}

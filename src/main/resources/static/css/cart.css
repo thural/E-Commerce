@@ -1,0 +1,159 @@
+.cart-btn {
+    width: 2rem;
+    height: 2rem;
+    z-index: 1;
+    background-color: bisque;
+    padding: 10px;
+    border-radius: 50px;
+    cursor: pointer;
+}
+
+.cart-badge {
+    top: -25%;
+    right: 50%;
+    width: 75%;
+    height: 75%;
+    margin: 0;
+    display: flex;
+    padding: 0;
+    position: relative;
+    font-size: 1rem;
+    align-items: center;
+    border-radius: 50%;
+    justify-content: center;
+    vertical-align: middle;
+    line-height: 100%;
+    background-color: lightcoral;
+}
+
+.cart-bckg {
+    position: fixed;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    z-index: 0;
+    display: none;
+}
+
+.cart {
+    top: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 1;
+    margin: 0;
+    color: black;
+    width: 36vmax;
+    padding: 1rem;
+    display: none;
+    font-size: 16px;
+    position: fixed;
+    flex-wrap: nowrap;
+    justify-items: center;
+    box-sizing: border-box;
+    background-color: white;
+    grid-template-rows: 1fr 7fr 1fr 1fr;
+    box-shadow: rgb(0 0 0 / 25%) -16px 0px 32px 32px;
+}
+
+.cart a,
+.cart a:hover,
+.cart a:focus,
+.cart a:active {
+    text-decoration: none;
+    color: inherit;
+}
+
+.cart li {
+    list-style: none;
+}
+
+.items {
+    gap: 1rem;
+    width: 100%;
+    margin: auto;
+    display: grid;
+    overflow: auto;
+    max-height: 100%;
+    min-height: 50%;
+    border-radius: 1rem;
+    grid-auto-rows: 150px;
+    justify-content: space-around;
+    background-color: whitesmoke;
+    grid-template-columns: 100%;
+    box-shadow: inset rgb(0 0 0 / 25%) 0px 0px 16px 0px;
+}
+
+.item {
+    margin: 0;
+    display: grid;
+    align-items: center;
+    align-content: center;
+    justify-content: center;
+    grid-template-columns: 1fr 2fr;
+}
+
+.image {
+    min-width: 64px;
+    min-height: 64px;
+    display: flex;
+}
+
+.image img {
+    max-height: 64px;
+    max-width: 64px;
+    margin: auto;
+}
+
+.details {
+    display: flex;
+    flex-direction: column;
+    flex-wrap: nowrap;
+    gap: 1rem;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.details * {
+    margin-top: 0;
+    margin-bottom: 0;
+}
+
+.counter {
+    display: flex;
+    align-items: center;
+    flex-direction: row;
+    justify-content: center;
+    gap: 1rem;
+}
+
+.cart p {
+    align-self: center;
+    font-weight: 600;
+}
+
+.cart h3 {
+    font-size: 2rem;
+    margin-top: 1rem;
+}
+
+.buttons {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    width: 100%;
+    height: fit-content;
+    gap: 1rem;
+    margin-top: auto;
+    margin-bottom: 1rem;
+}
+
+.buttons button {
+    border: 1px solid lightgrey;
+    padding: 1em;
+    font-size: 1rem;
+    font-weight: 600;
+    border-radius: 0.5rem;
+    background-color: lightsalmon;
+    cursor: pointer;
+}

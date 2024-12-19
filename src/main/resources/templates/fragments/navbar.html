@@ -6,13 +6,32 @@
 </head>
 <body>
 <!-- Navbar Fragment -->
-<nav class="navbar" th:fragment="navbar">
-    <div class="navbar-container">
-        <!-- Logo or Brand -->
-        <div class="navbar-brand">
-            <a class="navbar-logo" th:href="@{/}">Shopping Cart</a>
+<div class="navbar" th:fragment="navbar">
+    <link rel="stylesheet" th:href="@{/css/navbar.css}">
+    <!-- Logo or Brand -->
+    <div class="navbar-brand">
+        <a class="navbar-logo" th:href="@{/}">ShoppingCart</a>
+    </div>
+    <!-- User Account and Logout Section -->
+    <div>
+        <!-- Show different content based on authentication status -->
+        <div class="navbar-user" sec:authorize="isAuthenticated()">
+            <!-- Username display -->
+            <!--            <span class="username" sec:authentication="name">Username</span>-->
+            <!-- Logout Form -->
+            <form class="logout-form" method="post" th:action="@{/logout}">
+                <input th:name="${_csrf.parameterName}" th:value="${_csrf.token}" type="hidden"/>
+                <button class="button-outline" type="submit">login</button>
+            </form>
         </div>
 
+        <!-- Login and Register links for unauthenticated users -->
+        <div class="navbar-user" sec:authorize="!isAuthenticated()">
+            <a class="login-link" th:href="@{/login}">Login</a>
+        </div>
+    </div>
+
+    <nav>
         <!-- Navigation Links -->
         <ul class="navbar-menu">
             <li class="navbar-item">
@@ -22,31 +41,11 @@
                 <a class="navbar-link" th:href="@{/products}">Products</a>
             </li>
             <!-- Add more navigation items as needed -->
+            <div th:replace="~{components/cart :: cart}"></div>
         </ul>
+    </nav>
 
-        <!-- User Account and Logout Section -->
-        <div class="navbar-user">
-            <!-- Show different content based on authentication status -->
-            <div sec:authorize="isAuthenticated()">
-                <!-- Username display -->
-                <span class="username" sec:authentication="name">Username</span>
 
-                <!-- Logout Form -->
-                <form class="logout-form" method="post" th:action="@{/logout}">
-                    <input th:name="${_csrf.parameterName}" th:value="${_csrf.token}" type="hidden"/>
-                    <button class="logout-button" type="submit">
-                        <i class="logout-icon">&#x2398;</i> Logout
-                    </button>
-                </form>
-            </div>
-
-            <!-- Login and Register links for unauthenticated users -->
-            <div sec:authorize="!isAuthenticated()">
-                <a class="login-link" th:href="@{/login}">Login</a>
-                <a class="register-link" th:href="@{/register}">Register</a>
-            </div>
-        </div>
-    </div>
-</nav>
+</div>
 </body>
 </html>

@@ -14,8 +14,11 @@
     <!-- Admin/Manager Special Actions -->
     <div th:replace="~{fragments/product-components :: product-admin-actions}"></div>
 
+    <tr th:if="${products == null or products.isEmpty()}">
+        <td colspan="8">No products found</td>
+    </tr>
     <!-- Product Table -->
-    <table class="products table">
+    <table class="products table" th:unless="${products != null || products.isEmpty()}">
         <thead>
         <tr>
             <th>ID</th>
@@ -29,9 +32,6 @@
         </tr>
         </thead>
         <tbody>
-        <tr th:if="${products == null or products.isEmpty()}">
-            <td colspan="8">No products found</td>
-        </tr>
         <tr th:each="product : ${products}"
             th:replace="~{fragments/product-components :: product-card}"
         >

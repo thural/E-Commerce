@@ -1,0 +1,9 @@
+<div th:fragment="button(text, url, cssClass, type)" th:inline="text"
+     xmlns:th="http://www.thymeleaf.org">
+    <button
+            th:class="${cssClass}"
+            th:text="${text}"
+            th:type="${type ? type : submit}">
+        [[${text}]]
+    </button>
+</div>

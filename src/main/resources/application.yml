@@ -1,4 +1,5 @@
 spring:
+  thymeleaf.cache: false
   web:
     resources:
       add-mappings: true
@@ -13,8 +14,7 @@ spring:
       max-request-size: 5MB
   devtools:
     livereload.enabled: true
-    restart:
-      enabled: true
+    restart.enabled: true
 
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
