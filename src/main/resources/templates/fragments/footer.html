@@ -1,15 +1,16 @@
 <!DOCTYPE html>
-<html
-        xmlns:th="http://www.thymeleaf.org">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
+    <title>Footer Example</title>
 </head>
 <body>
-<!-- Common Footer -->
-<footer class="footer mt-auto py-3 bg-light" th:fragment="footer">
-    <div class="container text-center">
-        <span class="text-muted">&copy; 2024 Your Company Name. All rights reserved.</span>
-    </div>
-</footer>
+<div class="footer" th:fragment="footer">
+    <link rel="stylesheet" th:href="@{/css/footer.css}">
+    <a href="https://github.com/thural">
+        <p>Copyright © 2024 thural</p>
+        <img alt="GitHub logo" th:src="@{/icons/github-svgrepo-com.svg}">
+    </a>
+</div>
 </body>
 </html>

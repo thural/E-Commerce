@@ -7,7 +7,7 @@
 <div th:fragment="cart">
     <link rel="stylesheet" th:href="@{/css/cart.css}">
     <div class="cart-btn" onclick="toggleDisplay()">
-        <img alt="cart" th:src="@{/images/cart.svg}">
+        <img alt="cart" th:src="@{/icons/cart.svg}">
         <div class="cart-badge" th:text="${cartItems != null ? #lists.size(cartItems) : 0}">0</div>
     </div>
 
