@@ -53,7 +53,7 @@
     box-sizing: border-box;
     background-color: white;
     grid-template-rows: 1fr 7fr 1fr 1fr;
-    box-shadow: rgb(0 0 0 / 25%) -16px 0px 32px 32px;
+    box-shadow: rgb(0 0 0 / 50%) 32px 0px 16px 24px;
 }
 
 .cart a,
@@ -76,12 +76,12 @@
     overflow: auto;
     max-height: 100%;
     min-height: 50%;
-    border-radius: 1rem;
+    border-radius: .5rem;
     grid-auto-rows: 150px;
     justify-content: space-around;
     background-color: whitesmoke;
     grid-template-columns: 100%;
-    box-shadow: inset rgb(0 0 0 / 25%) 0px 0px 16px 0px;
+    box-shadow: inset rgb(0 0 0 / 25%) 0px 0px 12px -6px;
 }
 
 .item {
@@ -134,7 +134,7 @@
 }
 
 .cart h3 {
-    font-size: 2rem;
+    font-size: 1.75rem;
     margin-top: 1rem;
 }
 

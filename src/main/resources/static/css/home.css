@@ -1,0 +1,36 @@
+.home {
+    display: flex;
+    flex-flow: column nowrap;
+    justify-content: center;
+    align-items: center;
+    margin-top: 20vh;
+}
+
+.home .home-text {
+    min-width: min-content;
+    display: flex;
+    flex-flow: column nowrap;
+    justify-content: center;
+    align-items: center;
+}
+
+.home h1 {
+    font-size: 2rem;
+    margin-bottom: 6rem;
+    text-align: center
+}
+
+.home h3 {
+    font-size: 1.5rem;
+}
+
+.home button {
+    font-size: 2rem;
+    background-color: black;
+    color: white;
+    padding: 1rem 3rem;
+    font-weight: 600;
+    border: 1px solid black;
+    border-radius: 3rem;
+    width: max-content;
+}

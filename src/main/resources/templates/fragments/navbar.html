@@ -21,13 +21,13 @@
             <!-- Logout Form -->
             <form class="logout-form" method="post" th:action="@{/logout}">
                 <input th:name="${_csrf.parameterName}" th:value="${_csrf.token}" type="hidden"/>
-                <button class="button-outline" type="submit">login</button>
+                <button class="button-outline" type="submit">logout</button>
             </form>
         </div>
 
         <!-- Login and Register links for unauthenticated users -->
         <div class="navbar-user" sec:authorize="!isAuthenticated()">
-            <a class="login-link" th:href="@{/login}">Login</a>
+            <a class="login-link" th:href="@{/login}">login</a>
         </div>
     </div>
 
@@ -35,7 +35,7 @@
         <!-- Navigation Links -->
         <ul class="navbar-menu">
             <li class="navbar-item">
-                <a class="navbar-link" th:href="@{/home}">Home</a>
+                <a class="navbar-link" th:href="@{/}">Home</a>
             </li>
             <li class="navbar-item">
                 <a class="navbar-link" th:href="@{/products}">Products</a>

@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html
+        lang="en"
+        th:replace="~{layout :: layout(~{::title}, ~{::section})}"
+        xmlns:th="http://www.thymeleaf.org"
+>
+<head>
+    <meta charset="UTF-8">
+    <title>Home</title>
+</head>
+<body>
+<section>
+    <link rel="stylesheet" th:href="@{/css/home.css}">
+    <div class="home">
+        <div class="home-text">
+            <h3>"Best fake store of the galaxy"</h3>
+            <h1>Your wish is one click away</h1>
+            <a th:href="@{/products}">
+                <button>Shop now</button>
+            </a>
+        </div>
+        <div class="home-image"></div>
+    </div>
+</section>
+</body>
+</html>
