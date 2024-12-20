@@ -1,5 +1,6 @@
 package dev.thural.shopping_cart.model;
 
+import dev.thural.shopping_cart.util.annotation.ValidFileSize;
 import jakarta.validation.constraints.DecimalMin;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -26,7 +27,7 @@ public class ProductDto {
     private String description;
 
     @NotNull(message = "Product image is required")
-    @Size(max = 5242880, message = "File size must be less than 5MB")
+    @ValidFileSize(maxSize = 5242880, message = "File size must be less than 5MB")
     private MultipartFile imageFile;
 
     private String imageFileName;

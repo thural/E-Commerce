@@ -63,7 +63,12 @@ public class ProductController {
         if (!model.containsAttribute("productDto")) {
             model.addAttribute("productDto", new ProductDto());
         }
-        return "products/create-product";
+        if (!model.containsAttribute("categories")) {
+            // TODO: move category data to another layer
+            List<String> categories = List.of("PHONE", "COMPUTER", "ACCESSORY", "PRINTER", "CAMERA", "OTHER");
+            model.addAttribute("categories", categories);
+        }
+        return "products/create-product-form";
     }
 
     @PostMapping("/create")

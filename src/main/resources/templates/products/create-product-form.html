@@ -1,53 +1,42 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html th:replace="~{layout :: layout(~{::title}, ~{::main})}"
+      xmlns:th="http://www.thymeleaf.org">
 <head>
-    <meta charset="UTF-8">
-    <meta content="width=device-width, initial-scale=1.0" name="viewport">
     <title>Create Product</title>
     <link rel="stylesheet" th:href="@{/css/create-product.css}">
 </head>
 <body>
-<div class="container">
+<main>
     <div class="center">
         <h1>Add New Product</h1>
-
-        <!-- Global Errors Fragment -->
-        <div th:replace="~{fragments/form :: global-errors}"></div>
-
         <form enctype="multipart/form-data"
               method="post"
               th:action="@{/products/create}"
               th:object="${productDto}">
 
-            <!-- Name Field Fragment -->
-            <div th:replace="~{fragments/form :: input-field(label='Name', field='name', type='text', options=null)}"></div>
+            <!-- Global Errors - Moved inside form -->
+            <div th:replace="~{fragments/form :: global-errors}"></div>
 
-            <!-- Category Field Fragment -->
-            <div th:replace="~{fragments/form :: input-field(label='Category', field='category', type='select',
-                options=${{items: [
-                    {value: 'PHONE', label: 'Phone'},
-                    {value: 'COMPUTER', label: 'Computer'},
-                    {value: 'ACCESSORY', label: 'Accessory'},
-                    {value: 'PRINTER', label: 'Printer'},
-                    {value: 'CAMERA', label: 'Camera'},
-                    {value: 'OTHER', label: 'Other'}
-                ]}})"></div>
+            <!-- Name field -->
+            <div th:replace="~{fragments/form :: text-field(label='Name', field='name')}"></div>
 
-            <!-- Price Field Fragment -->
-            <div th:replace="~{fragments/form :: input-field(label='Price', field='price', type='number', options=${{step: '0.01'}})"></div>
+            <!-- Category field -->
+            <div th:replace="~{fragments/form :: select-field(label='Category', field='category', items=${categories})}"></div>
 
-            <!-- Description Field Fragment -->
-            <div th:replace="~{fragments/form :: input-field(label='Description', field='description', type='textarea', options=${{rows: 4}})"></div>
+            <!-- Price field -->
+            <div th:replace="~{fragments/form :: number-field(label='Price', field='price', step='0.01')}"></div>
 
-            <!-- Image Upload Field Fragment -->
-            <div th:replace="~{fragments/form :: file-input-field(label='Product Image', field='imageFile')}"></div>
+            <!-- Description field -->
+            <div th:replace="~{fragments/form :: textarea-field(label='Description', field='description', rows=4)}"></div>
 
-            <!-- Form Actions Fragment -->
+            <!-- Image upload field -->
+            <div th:replace="~{fragments/form :: file-field(label='Product Image', field='imageFile')}"></div>
+
+            <!-- Form actions -->
             <div th:replace="~{fragments/form :: form-actions}"></div>
         </form>
     </div>
-</div>
-
-<script th:src="@{/js/image-preview.js}"></script>
+    <script th:src="@{/js/image-preview.js}"></script>
+</main>
 </body>
 </html>

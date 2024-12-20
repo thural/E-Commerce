@@ -23,8 +23,8 @@
 
 <!-- Product Admin Actions Fragment -->
 <div th:fragment="product-admin-actions">
-    <div sec:authorize="hasRole('ADMIN')">
-        <button class="btn btn-danger">Admin Special Action</button>
+    <div sec:authorize="hasAnyRole('ADMIN', 'MANAGER')">
+        <div th:replace="~{components/button-anchor :: button('Create Product', @{products/create}, 'button-primary')}"></div>
     </div>
     <div sec:authorize="hasRole('MANAGER')">
         <button class="btn btn-warning">Manager Special Action</button>
