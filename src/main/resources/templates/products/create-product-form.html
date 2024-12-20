@@ -3,11 +3,12 @@
       xmlns:th="http://www.thymeleaf.org">
 <head>
     <title>Create Product</title>
-    <link rel="stylesheet" th:href="@{/css/create-product.css}">
 </head>
 <body>
 <main>
-    <div class="center">
+    <link rel="stylesheet" th:href="@{/css/create-product.css}">
+    <link rel="stylesheet" th:href="@{/css/form.css}">
+    <div class="form-container">
         <h1>Add New Product</h1>
         <form enctype="multipart/form-data"
               method="post"
