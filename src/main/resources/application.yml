@@ -1,4 +1,6 @@
 spring:
+  custom:
+    admin-password: ${ADMIN_PASSWORD}
   thymeleaf.cache: false
   web:
     resources:
