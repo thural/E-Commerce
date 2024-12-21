@@ -1,6 +1,7 @@
 package dev.thural.shopping_cart.controller;
 
 import dev.thural.shopping_cart.entity.Product;
+import dev.thural.shopping_cart.mapper.ProductMapper;
 import dev.thural.shopping_cart.model.CartDto;
 import dev.thural.shopping_cart.model.ProductDto;
 import dev.thural.shopping_cart.service.CartService;
@@ -27,15 +28,19 @@ import java.util.Optional;
 @RequestMapping("/products")
 public class ProductController {
     private final CartService cartService;
+    private final ProductMapper productMapper;
     private final ProductService productService;
     private final FileStorageService fileStorageService;
 
     @GetMapping
     public String listProducts(Model model, HttpSession session) {
-        List<Product> products = productService.getAll();
+        List<ProductDto> products = productService.getAll().stream()
+                .map(productMapper::toDto)
+                .toList();
         CartDto cart = cartService.getCart(session);
         model.addAttribute("cart", cart);
         model.addAttribute("products", products);
+        log.info("products on getAll: {}", products);
         return "products/index";
     }
 

@@ -1,13 +1,21 @@
 package dev.thural.shopping_cart.model;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
+import lombok.experimental.SuperBuilder;
 
 @Data
-public class LoginDto {
+@NoArgsConstructor
+@SuperBuilder(toBuilder = true)
+@EqualsAndHashCode(callSuper = true)
+@JsonInclude(JsonInclude.Include.NON_NULL)
+public class LoginDto extends BaseResponse {
 
     @Email(message = "invalid email format")
     @NotEmpty(message = "email field is empty")
