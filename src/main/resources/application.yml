@@ -1,4 +1,7 @@
 spring:
+  mvc:
+    static-path-pattern: /static/**
+    favicon.enabled: false
   custom:
     admin-password: ${ADMIN_PASSWORD}
   thymeleaf.cache: false
@@ -6,8 +9,6 @@ spring:
     resources:
       add-mappings: true
       static-locations: classpath:/static/
-  mvc:
-    static-path-pattern: /static/**
   application:
     name: shopping-cart
   servlet:

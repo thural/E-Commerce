@@ -1,24 +1,26 @@
 <!DOCTYPE html>
-<html
-        lang="en"
-        th:replace="~{layout :: layout(~{::title}, ~{::section})}"
-        xmlns:th="http://www.thymeleaf.org"
->
+<html th:replace="~{layout :: layout(~{::title}, ~{::section})}"
+      xmlns:th="http://www.thymeleaf.org">
 <head>
-    <meta charset="UTF-8">
     <title>Products List</title>
     <link rel="stylesheet" th:href="@{/css/products.css}">
 </head>
 <body>
 <section>
-    <!-- Admin/Manager Special Actions -->
+    <!-- Debug information -->
+    <!--    <div>-->
+    <!--        <p th:text="${'Products list is null: ' + (products == null)}"></p>-->
+    <!--        <p th:text="${'Products list is empty: ' + (#lists.isEmpty(products))}"></p>-->
+    <!--        <p th:text="${'Products size: ' + (#lists.isEmpty(products) ? 0 : products.size())}"></p>-->
+    <!--    </div>-->
+
     <div th:replace="~{fragments/product-components :: product-admin-actions}"></div>
 
-    <div class="products table" th:if="${products == null or products.isEmpty()}">
-        <td colspan="8">No products found</td>
+    <div class="alert" th:if="${products == null || products.isEmpty()}">
+        <span>No products found</span>
     </div>
-    <!-- Product Table -->
-    <table class="products table" th:unless="${products != null || products.isEmpty()}">
+
+    <table class="products table" th:if="${!#lists.isEmpty(products)}">
         <thead>
         <tr>
             <th>ID</th>
@@ -32,14 +34,14 @@
         </tr>
         </thead>
         <tbody>
-        <tr th:each="product : ${products}"
-            th:replace="~{fragments/product-components :: product-card}"
-        >
-        </tr>
+        <!-- Product rows -->
+        <th:block th:each="product : ${products}">
+            <tr th:replace="~{fragments/product-components :: product-card(productData=${product})}">
+            </tr>
+        </th:block>
         </tbody>
     </table>
 </section>
-<!-- Optional: Page-specific JavaScript -->
 <script th:src="@{/js/products.js}"></script>
 </body>
 </html>

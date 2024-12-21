@@ -2,34 +2,35 @@
 <html xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity6"
       xmlns:th="http://www.thymeleaf.org">
 <body>
-
 <!-- Product Row Fragment -->
-<tr th:fragment="product-card" th:if="${product != null}" th:object="${product}">
-    <td th:text="*{id}"></td>
-    <td th:text="*{name}"></td>
-    <td th:text="*{brand}"></td>
-    <td th:text="*{category}"></td>
-    <td th:text="*{price}"></td>
+<tr th:fragment="product-card(productData)" th:with="product=${productData}">
+    <!-- Debug info -->
+    <!--    <td th:text="${'Debug: ' + product}"></td>-->
+
+    <td th:text="${product.id}"></td>
+    <td th:text="${product.name}"></td>
+    <td th:text="${product.brand}"></td>
+    <td th:text="${product.category}"></td>
+    <td th:text="${product.price}"></td>
     <td>
         <img alt="Product Image"
-             th:src="${product.imageFileName != null} ? @{'/images/' + *{imageFileName}} : @{'/images/default-product.png'}">
+             th:src="${product.imageFileName != null} ? @{'/images/' + product.imageFileName} : @{'/images/default-product.png'}">
     </td>
-    <td th:text="*{createDate.toString()}"></td>
+    <td th:text="${product.createDate}"></td>
     <td class="nowrap" sec:authorize="hasAnyRole('ADMIN', 'MANAGER')">
-        <div th:replace="~{components :: button('Edit', @{products/edit(id=*{id})}, 'btn btn-primary')}"></div>
-        <div th:replace="~{components :: delete-button(*{id})}"></div>
+        <div th:replace="~{components/button-anchor :: button-anchor('Edit', @{/products/edit(id=${product.id})}, 'button secondary')}"></div>
+        <div th:replace="~{components/delete-button :: delete-button(${product.id})}"></div>
     </td>
 </tr>
 
 <!-- Product Admin Actions Fragment -->
 <div th:fragment="product-admin-actions">
     <div sec:authorize="hasAnyRole('ADMIN', 'MANAGER')">
-        <div th:replace="~{components/button-anchor :: button('Create Product', @{products/create}, 'button-primary')}"></div>
+        <div th:replace="~{components/button-anchor :: button-anchor('Create Product', @{products/create}, 'button-primary')}"></div>
     </div>
     <div sec:authorize="hasRole('MANAGER')">
         <button class="btn btn-warning">Manager Special Action</button>
     </div>
 </div>
-
 </body>
 </html>
