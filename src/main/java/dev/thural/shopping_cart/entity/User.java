@@ -1,9 +1,7 @@
 package dev.thural.shopping_cart.entity;
 
 import dev.thural.shopping_cart.emums.Role;
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.PrePersist;
+import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
@@ -40,13 +38,14 @@ public class User extends BaseEntity implements UserDetails, Principal {
     @NotBlank
     private String password;
 
-
     private String firstname;
     private String lastname;
     private OffsetDateTime dateOfBirth;
     private boolean accountLocked;
     private boolean enabled;
 
+    @OneToOne(mappedBy = "user", cascade = CascadeType.ALL)
+    private Cart cart;
 
     @NotNull
     private Role role;

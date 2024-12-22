@@ -1,7 +1,4 @@
-/**
- * Custom error controller for handling error pages
- */
-package dev.thural.shopping_cart.controller;
+package dev.thural.shopping_cart.controller.mvc;
 
 import jakarta.servlet.RequestDispatcher;
 import jakarta.servlet.http.HttpServletRequest;

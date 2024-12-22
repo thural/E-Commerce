@@ -1,6 +1,7 @@
 package dev.thural.shopping_cart.service.impl;
 
 import dev.thural.shopping_cart.entity.Product;
+import dev.thural.shopping_cart.mapper.ProductMapper;
 import dev.thural.shopping_cart.model.ProductDto;
 import dev.thural.shopping_cart.repository.ProductRepository;
 import dev.thural.shopping_cart.service.ProductService;
@@ -27,8 +28,9 @@ import java.util.Optional;
 public class ProductServiceImpl implements ProductService {
 
     private final ProductRepository repository;
+    private final ProductMapper productMapper;
 
-    
+
     private String saveImage(MultipartFile image) {
         OffsetDateTime time = OffsetDateTime.now();
         String filename = time + "_" + image.getOriginalFilename();
@@ -60,6 +62,12 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
+    public List<ProductDto> getAllDto() {
+        return getAll().stream()
+                .map(productMapper::toDto).toList();
+    }
+
+    @Override
     public void saveProduct(ProductDto productDto) {
         String filename = saveImage(productDto.getImageFile());
         Product product = new Product();
@@ -70,10 +78,9 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public ProductDto getProductDtoById(Long id) {
-        Product product = repository.findById(id).orElseThrow(EntityNotFoundException::new);
-        ProductDto productDto = new ProductDto();
-        BeanUtils.copyProperties(product, productDto);
-        return productDto;
+        return repository.findById(id)
+                .map(productMapper::toDto)
+                .orElseThrow(EntityNotFoundException::new);
     }
 
     @Override

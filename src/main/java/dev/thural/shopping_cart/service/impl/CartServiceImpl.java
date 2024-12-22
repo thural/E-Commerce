@@ -1,9 +1,17 @@
 package dev.thural.shopping_cart.service.impl;
 
+import dev.thural.shopping_cart.entity.Cart;
+import dev.thural.shopping_cart.entity.CartItem;
 import dev.thural.shopping_cart.entity.Product;
+import dev.thural.shopping_cart.entity.User;
+import dev.thural.shopping_cart.mapper.CartMapper;
 import dev.thural.shopping_cart.model.CartDto;
-import dev.thural.shopping_cart.model.CartItemDto;
+import dev.thural.shopping_cart.repository.CartRepository;
+import dev.thural.shopping_cart.service.CartItemService;
 import dev.thural.shopping_cart.service.CartService;
+import dev.thural.shopping_cart.service.CommonService;
+import dev.thural.shopping_cart.service.ProductService;
+import jakarta.persistence.EntityNotFoundException;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -12,30 +20,71 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class CartServiceImpl implements CartService {
 
-    public CartDto getCart(HttpSession session) {
-        CartDto cart = (CartDto) session.getAttribute("cart");
-        if (cart == null) {
-            cart = new CartDto();
+    private final CommonService commonService;
+    private final ProductService productService;
+    private final CartRepository cartRepository;
+    private final CartItemService cartItemService;
+    private final CartMapper cartMapper;
+
+    public Cart getCart(HttpSession session) {
+        User user = commonService.getSignedUser();
+        Cart cart = (Cart) session.getAttribute("cart");
+        if (cart != null) {
+            cart = cartRepository.findById(cart.getId()).orElse(null);
+            session.setAttribute("cart", cart);
+        } else {
+            cart = user.getCart();
+            if (cart == null) {
+                cart = new Cart();
+                cart.setUser(user);
+                cart = cartRepository.save(cart);
+            }
             session.setAttribute("cart", cart);
         }
         return cart;
     }
 
-    public void addItemToCart(CartDto cart, Product product, HttpSession session) {
-        CartItemDto existingCartItem = cart.getItems().stream()
+    @Override
+    public CartDto getCartDto(HttpSession session) {
+        return cartMapper.toDto(getCart(session));
+    }
+
+    public Cart addItemToCart(Cart cart, Product product) {
+        CartItem existingCartItem = cart.getCartItems().stream()
                 .filter(item -> item.getProduct().getId().equals(product.getId()))
                 .findFirst()
                 .orElse(null);
 
         if (existingCartItem != null) {
-            // Product already exists in the cart, increment the quantity
             existingCartItem.setQuantity(existingCartItem.getQuantity() + 1);
         } else {
-            // Product is not in the cart, create a new CartItem
-            CartItemDto cartItem = new CartItemDto();
+            CartItem cartItem = new CartItem();
             cartItem.setProduct(product);
             cartItem.setQuantity(1);
-            cart.getItems().add(cartItem);
+            cartItem.setCart(cart);
+            cart.getCartItems().add(cartItem);
         }
+        return cartRepository.save(cart);
+    }
+
+    public CartDto addItemToCartById(HttpSession session, Long productId) {
+        Product product = productService.getProductById(productId)
+                .orElseThrow(EntityNotFoundException::new);
+        Cart cart = getCart(session);
+        Cart updatedCart = addItemToCart(cart, product);
+        return cartMapper.toDto(updatedCart);
+    }
+
+    public Cart removeItemFromCart(Cart cart, CartItem cartItem) {
+        cart.getCartItems().remove(cartItem);
+        return cartRepository.save(cart);
+    }
+
+    @Override
+    public CartDto removeItemFromCartById(HttpSession session, Long productId) {
+        Cart cart = getCart(session);
+        CartItem cartItem = cartItemService.getCartItemById(productId);
+        Cart updatedCart = removeItemFromCart(cart, cartItem);
+        return cartMapper.toDto(updatedCart);
     }
 }

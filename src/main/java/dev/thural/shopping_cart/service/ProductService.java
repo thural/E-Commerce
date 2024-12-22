@@ -11,6 +11,8 @@ public interface ProductService {
 
     List<Product> getAll();
 
+    List<ProductDto> getAllDto();
+
     void saveProduct(ProductDto productDto);
 
     ProductDto getProductDtoById(Long id);

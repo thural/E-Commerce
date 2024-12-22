@@ -1,4 +1,4 @@
-package dev.thural.shopping_cart.controller;
+package dev.thural.shopping_cart.controller.mvc;
 
 import dev.thural.shopping_cart.model.RegistrationDto;
 import dev.thural.shopping_cart.service.impl.AuthServiceImpl;
@@ -45,7 +45,6 @@ public class AuthController {
             Model model
     ) {
         try {
-            log.info("registering user ...");
             authService.registerNewUser(dto);
             return "redirect:/register?success";
         } catch (Exception e) {
