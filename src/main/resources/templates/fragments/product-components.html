@@ -3,7 +3,7 @@
       xmlns:th="http://www.thymeleaf.org">
 <body>
 <!-- Product Row Fragment -->
-<tr th:fragment="product-card(productData)" th:with="product=${productData}">
+<tr th:fragment="product-row(productData)" th:with="product=${productData}">
     <!-- Debug info -->
     <!--    <td th:text="${'Debug: ' + product}"></td>-->
 
@@ -22,6 +22,29 @@
         <div th:replace="~{components/delete-button :: delete-button(${product.id})}"></div>
     </td>
 </tr>
+
+
+<!-- Products table fragment -->
+<table class="products table" th:fragment="product-table(products)" th:if="${!#lists.isEmpty(products)}">
+    <thead>
+    <tr>
+        <th>ID</th>
+        <th>Name</th>
+        <th>Brand</th>
+        <th>Category</th>
+        <th>Price</th>
+        <th>Image</th>
+        <th>Date</th>
+        <th>Action</th>
+    </tr>
+    </thead>
+    <tbody>
+    <th:block th:each="product : ${products}">
+        <tr th:replace="~{fragments/product-components :: product-row(productData=${product})}">
+        </tr>
+    </th:block>
+    </tbody>
+</table>
 
 <!-- Product Admin Actions Fragment -->
 <div th:fragment="product-admin-actions">

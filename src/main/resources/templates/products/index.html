@@ -20,27 +20,14 @@
         <span>No products found</span>
     </div>
 
-    <table class="products table" th:if="${!#lists.isEmpty(products)}">
-        <thead>
-        <tr>
-            <th>ID</th>
-            <th>Name</th>
-            <th>Brand</th>
-            <th>Category</th>
-            <th>Price</th>
-            <th>Image</th>
-            <th>Date</th>
-            <th>Action</th>
-        </tr>
-        </thead>
-        <tbody>
-        <!-- Product rows -->
+    <!-- Products Panel-->
+    <div class="product-panel">
         <th:block th:each="product : ${products}">
-            <tr th:replace="~{fragments/product-components :: product-card(productData=${product})}">
-            </tr>
+            <div th:replace="~{components/product-card :: product-card(${product})}">
+            </div>
         </th:block>
-        </tbody>
-    </table>
+    </div>
+
 </section>
 <script th:src="@{/js/products.js}"></script>
 </body>
