@@ -25,10 +25,10 @@
                     <h5 th:text="${item.title}">Product Title</h5>
                     <p>$<span th:text="${item.price * item.count}">0.00</span></p>
                     <div class="counter">
-                        <button th:onclick="'handleCart(' + ${item.id} + ', \'decrement\', ' + ${item.count} + ')'">-
+                        <button th:onclick="'handleCart(' + ${item.id} + ', \'DECREMENT\', ' + ${item.count} + ')'">-
                         </button>
                         <p th:text="${item.count}">0</p>
-                        <button th:onclick="'handleCart(' + ${item.id} + ', \'increment\', ' + ${item.count} + ')'">+
+                        <button th:onclick="'handleCart(' + ${item.id} + ', \'INCREMENT\', ' + ${item.count} + ')'">+
                         </button>
                     </div>
                 </div>
@@ -42,7 +42,8 @@
             <button onclick="toggleDisplay()">close</button>
         </div>
     </div>
-    <script th:src="@{/js/cart.js}"></script>
+    <script th:src="@{/js/cart.js}" type="module"></script>
+    <script th:src="@{/js/product-card.js}" type="module"></script>
 </div>
 </body>
 </html>

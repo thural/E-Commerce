@@ -57,7 +57,7 @@ logging:
       max-file-size: 2MB
       max-history: 3
 server:
-  port: 8088
+  port: 8080
   error.whitelabel.enabled: false
 
 file:

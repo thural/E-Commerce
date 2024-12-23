@@ -1,63 +1,54 @@
-document.addEventListener('DOMContentLoaded', function() {
-    // Initialize cart display state
-    let isCartVisible = false;
+import { APIController } from './api.js';
 
-    // Get DOM elements
-    const cart = document.querySelector('.cart');
-    const cartBackground = document.querySelector('.cart-bckg');
+const UIController = {
+   elements: {
+       cart: document.querySelector('.cart'),
+       cartBackground: document.querySelector('.cart-bckg'),
+       cartBadge: document.querySelector('.cart-badge'),
+       cartTotal: document.getElementById('cartTotal')
+   },
+
+   toggleCart() {
+       const {cart, cartBackground} = this.elements;
+       const isHidden = cart.style.display === 'none' || !cart.style.display;
+       cart.style.display = isHidden ? 'grid' : 'none';
+       cartBackground.style.display = isHidden ? 'block' : 'none';
+   },
+
+   updateCartUI(data, itemId) {
+       const itemElement = document.getElementById(`item-${itemId}`);
+       const countElement = itemElement.querySelector('.counter p');
+       const priceElement = itemElement.querySelector('.details p');
+       
+       countElement.textContent = data.count;
+       priceElement.textContent = `$${(data.price * data.count).toFixed(2)}`;
+       this.elements.cartTotal.textContent = data.cartTotal.toFixed(2);
+       this.elements.cartBadge.textContent = data.totalItems;
+   }
+};
+
+
+const CartController = {
+   async handleCartAction(itemId, action, currentCount) {
+       if (action === 'DECREMENT' && currentCount <= 0) return;
+       
+       try {
+           const data = await APIController.updateCart(itemId, action);
+           UIController.updateCartUI(data, itemId);
+       } catch (error) {
+           console.error('Cart action failed:', error);
+       }
+   },
+
+   checkout() {
+       window.location.href = '/checkout';
+   }
+};
+
+
+document.addEventListener('DOMContentLoaded', () => {
+   const cartToggle = document.querySelector('.cart-toggle');
+   if (cartToggle) {
+       cartToggle.addEventListener('click', () => UIController.toggleCart());
+   }
 });
-
-function toggleDisplay() {
-
-console.log("toggle handler was clicked")
-    const cart = document.querySelector('.cart');
-    const cartBackground = document.querySelector('.cart-bckg');
-
-    if (cart.style.display === 'none' || !cart.style.display) {
-        cart.style.display = 'grid';
-        cartBackground.style.display = 'block';
-    } else {
-        cart.style.display = 'none';
-        cartBackground.style.display = 'none';
-    }
-}
-
-function handleCart(itemId, action, currentCount) {
-    const url = action === 'increment'
-        ? `/cart/increment/${itemId}`
-        : `/cart/decrement/${itemId}`;
-
-    // Only allow decrement if count is greater than 0
-    if (action === 'decrement' && currentCount <= 0) {
-        return;
-    }
-
-    fetch(url, {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-            'X-CSRF-TOKEN': document.querySelector('meta[name="_csrf"]').content
-        }
-    })
-    .then(response => response.json())
-    .then(data => {
-        // Update item count
-        const itemElement = document.getElementById(`item-${itemId}`);
-        const countElement = itemElement.querySelector('.counter p');
-        const priceElement = itemElement.querySelector('.details p');
-
-        countElement.textContent = data.count;
-        priceElement.textContent = `$${(data.price * data.count).toFixed(2)}`;
-
-        // Update total
-        document.getElementById('cartTotal').textContent = data.cartTotal.toFixed(2);
-
-        // Update badge
-        document.querySelector('.cart-badge').textContent = data.totalItems;
-    })
-    .catch(error => console.error('Error:', error));
-}
-
-function checkout() {
-    window.location.href = '/checkout';
-}

@@ -1,11 +1,13 @@
 package dev.thural.shopping_cart.service.impl;
 
+import dev.thural.shopping_cart.emums.CartAction;
 import dev.thural.shopping_cart.entity.Cart;
 import dev.thural.shopping_cart.entity.CartItem;
 import dev.thural.shopping_cart.entity.Product;
 import dev.thural.shopping_cart.entity.User;
 import dev.thural.shopping_cart.mapper.CartMapper;
 import dev.thural.shopping_cart.model.CartDto;
+import dev.thural.shopping_cart.model.request.CartRequest;
 import dev.thural.shopping_cart.repository.CartRepository;
 import dev.thural.shopping_cart.service.CartItemService;
 import dev.thural.shopping_cart.service.CartService;
@@ -73,6 +75,13 @@ public class CartServiceImpl implements CartService {
         Cart cart = getCart(session);
         Cart updatedCart = addItemToCart(cart, product);
         return cartMapper.toDto(updatedCart);
+    }
+
+    @Override
+    public CartDto handleCartAction(HttpSession session, CartRequest request) {
+        if (request.getAction().equals(CartAction.INCREMENT))
+            return addItemToCartById(session, request.getItemId());
+        else return removeItemFromCartById(session, request.getItemId());
     }
 
     public Cart removeItemFromCart(Cart cart, CartItem cartItem) {
