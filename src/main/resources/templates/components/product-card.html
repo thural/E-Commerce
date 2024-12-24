@@ -4,7 +4,7 @@
 <!-- Product Card Template -->
 <div class="product-card" th:fragment="product-card(product)" th:id="${product.id}">
     <link rel="stylesheet" th:href="@{/css/product-card.css}">
-    <div class="image">
+    <div class="image-container">
         <img alt="Product Image"
              th:src="${product.imageFileName != null} ? @{'/public/images/' + ${product.imageFileName}} : @{'/public/images/default-product.png'}">
     </div>
