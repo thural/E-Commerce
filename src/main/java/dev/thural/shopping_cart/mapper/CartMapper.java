@@ -21,7 +21,7 @@ public class CartMapper {
         cartDto.setTotalPrice(cart.getTotalItemPrice());
         List<CartItemDto> cartItems = cart.getCartItems().stream()
                 .map(cartItemMapper::toDto).toList();
-        cartDto.setItems(cartItems);
+        cartDto.setCartItems(cartItems);
         return cartDto;
     }
 }

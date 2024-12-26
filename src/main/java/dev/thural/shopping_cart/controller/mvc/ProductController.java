@@ -1,7 +1,6 @@
 package dev.thural.shopping_cart.controller.mvc;
 
 import dev.thural.shopping_cart.entity.Product;
-import dev.thural.shopping_cart.model.CartDto;
 import dev.thural.shopping_cart.model.ProductDto;
 import dev.thural.shopping_cart.service.CartService;
 import dev.thural.shopping_cart.service.FileStorageService;
@@ -33,8 +32,6 @@ public class ProductController {
     @GetMapping
     public String listProducts(Model model, HttpSession session) {
         List<ProductDto> products = productService.getAllDto();
-        CartDto cart = cartService.getCartDto(session);
-        model.addAttribute("cart", cart);
         model.addAttribute("products", products);
         log.info("products on getAll: {}", products);
         return "products/index";
@@ -45,9 +42,7 @@ public class ProductController {
     public String showProductDetails(@PathVariable Long productId, Model model, HttpSession session) {
         Product product = productService.getProductById(productId)
                 .orElseThrow(EntityNotFoundException::new);
-        CartDto cart = cartService.getCartDto(session);
         model.addAttribute("product", product);
-        model.addAttribute("cart", cart);
         return "productDetails";
     }
 

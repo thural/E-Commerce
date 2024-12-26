@@ -15,6 +15,6 @@ import java.util.List;
 @EqualsAndHashCode(callSuper = true)
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class CartDto extends BaseResponse {
-    private List<CartItemDto> items;
+    private List<CartItemDto> cartItems;
     private BigDecimal totalPrice;
 }

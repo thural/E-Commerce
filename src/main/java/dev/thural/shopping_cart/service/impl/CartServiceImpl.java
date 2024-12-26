@@ -30,20 +30,24 @@ public class CartServiceImpl implements CartService {
 
     public Cart getCart(HttpSession session) {
         User user = commonService.getSignedUser();
-        Cart cart = (Cart) session.getAttribute("cart");
-        if (cart != null) {
-            cart = cartRepository.findById(cart.getId()).orElse(null);
-            session.setAttribute("cart", cart);
+        CartDto cartDto = (CartDto) session.getAttribute("cart");
+
+        if (cartDto.getId() != null) {
+            session.setAttribute("cart", cartDto); // TODO: check for removal
+            return cartRepository.findById(cartDto.getId())
+                    .orElseThrow(EntityNotFoundException::new);
         } else {
-            cart = user.getCart();
+            Cart cart = user.getCart();
             if (cart == null) {
-                cart = new Cart();
-                cart.setUser(user);
+                cart = Cart.builder()
+                        .user(user)
+                        .build();
                 cart = cartRepository.save(cart);
+                cartDto = cartMapper.toDto(cart);
             }
-            session.setAttribute("cart", cart);
+            session.setAttribute("cart", cartDto);
+            return cart;
         }
-        return cart;
     }
 
     @Override
