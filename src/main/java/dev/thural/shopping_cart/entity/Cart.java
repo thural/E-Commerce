@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -29,5 +30,11 @@ public class Cart extends BaseEntity {
 
     public void removeItem(CartItem cartItem) {
         cartItems.remove(cartItem);
+    }
+
+    public BigDecimal getTotalItemPrice() {
+        return cartItems.stream()
+                .map(item -> item.getProduct().getPrice().multiply(BigDecimal.valueOf(item.getQuantity())))
+                .reduce(BigDecimal.ZERO, BigDecimal::add);
     }
 }
