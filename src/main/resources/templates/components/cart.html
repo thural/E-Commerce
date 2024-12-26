@@ -6,12 +6,12 @@
 <body>
 <div th:fragment="cart">
     <link rel="stylesheet" th:href="@{/css/cart.css}">
-    <div class="cart-btn" onclick="toggleDisplay()">
+    <div class="cart-btn" onclick="UIController.toggleCart()">
         <img alt="cart" th:src="@{/icons/cart.svg}">
         <div class="cart-badge" th:text="${cartItems != null ? #lists.size(cartItems) : 0}">0</div>
     </div>
 
-    <div class="cart-bckg" onclick="toggleDisplay()"></div>
+    <div class="cart-bckg" onclick="UIController.toggleCart()"></div>
 
     <div class="cart">
         <h3>Shopping Cart</h3>
@@ -25,10 +25,12 @@
                     <h5 th:text="${item.title}">Product Title</h5>
                     <p>$<span th:text="${item.price * item.count}">0.00</span></p>
                     <div class="counter">
-                        <button th:onclick="'handleCart(' + ${item.id} + ', \'DECREMENT\', ' + ${item.count} + ')'">-
+                        <button th:onclick="'CartController.handleCartAction(' + ${item.id} + ', \'DECREMENT\', ' + ${item.count} + ')'">
+                            -
                         </button>
                         <p th:text="${item.count}">0</p>
-                        <button th:onclick="'handleCart(' + ${item.id} + ', \'INCREMENT\', ' + ${item.count} + ')'">+
+                        <button th:onclick="'CartController.handleCartAction(' + ${item.id} + ', \'INCREMENT\', ' + ${item.count} + ')'">
+                            +
                         </button>
                     </div>
                 </div>
@@ -38,10 +40,11 @@
                           th:text="${cartItems != null ? #aggregates.sum(cartItems.![price * count]) : 0.00}">0.00</span>
         </h3>
         <div class="buttons">
-            <button onclick="checkout()">checkout</button>
-            <button onclick="toggleDisplay()">close</button>
+            <button onclick="CartController.checkout()">checkout</button>
+            <button onclick="UIController.toggleCart()">close</button>
         </div>
     </div>
+
     <script th:src="@{/js/cart.js}" type="module"></script>
     <script th:src="@{/js/product-card.js}" type="module"></script>
 </div>
