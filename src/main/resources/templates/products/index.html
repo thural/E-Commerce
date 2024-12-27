@@ -7,20 +7,12 @@
 </head>
 <body>
 <section>
-    <!-- Debug information -->
-    <!--    <div>-->
-    <!--        <p th:text="${'Products list is null: ' + (products == null)}"></p>-->
-    <!--        <p th:text="${'Products list is empty: ' + (#lists.isEmpty(products))}"></p>-->
-    <!--        <p th:text="${'Products size: ' + (#lists.isEmpty(products) ? 0 : products.size())}"></p>-->
-    <!--    </div>-->
-
     <div th:replace="~{fragments/product-components :: product-admin-actions}"></div>
 
     <div class="alert" th:if="${products == null || products.isEmpty()}">
         <span>No products found</span>
     </div>
 
-    <!-- Products Panel-->
     <div class="product-panel">
         <th:block th:each="product : ${products}">
             <div th:replace="~{components/product-card :: product-card(${product})}">

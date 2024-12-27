@@ -1,50 +1,80 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
+    <title>Cart</title>
 </head>
 <body>
 <div th:fragment="cart">
+    <!-- Diagnostic Information -->
+    <!--    <div style="background-color: #f0f0f0; padding: 10px; margin: 10px; border: 1px solid #ccc;">-->
+    <!--        <h4>Cart Session Diagnostics:</h4>-->
+    <!--        <p th:text="${'Session exists: ' + (session != null)}"></p>-->
+    <!--        <p th:text="${'Cart in session is null: ' + (session.cart == null)}"></p>-->
+    <!--        <p th:if="${session.cart != null}"-->
+    <!--           th:text="${'Cart is empty: ' + (#lists.isEmpty(session.cart.cartItems))}"></p>-->
+    <!--        <p th:if="${session.cart != null}"-->
+    <!--           th:text="${'Number of items: ' + #lists.size(session.cart.cartItems)}"></p>-->
+    <!--        <div th:if="${session.cart != null and !#lists.isEmpty(session.cart.cartItems)}">-->
+    <!--            <h5>First Item Details:</h5>-->
+    <!--            <p th:text="${'Cart Item ID: ' + session.cart.cartItems[0].id}"></p>-->
+    <!--            <p th:text="${'Product Name: ' + session.cart.cartItems[0].product.name}"></p>-->
+    <!--            <p th:text="${'Brand: ' + session.cart.cartItems[0].product.brand}"></p>-->
+    <!--            <p th:text="${'Price: ' + session.cart.cartItems[0].product.price}"></p>-->
+    <!--            <p th:text="${'Quantity: ' + session.cart.cartItems[0].quantity}"></p>-->
+    <!--            <p th:text="${'Image File Name: ' + session.cart.cartItems[0].product.imageFileName}"></p>-->
+    <!--        </div>-->
+    <!--    </div>-->
+
     <link rel="stylesheet" th:href="@{/css/cart.css}">
-    <div class="cart-btn" onclick="UIController.toggleCart()">
+    <div class="cart-btn cart-toggle">
         <img alt="cart" th:src="@{/icons/cart.svg}">
-        <div class="cart-badge" th:text="${cartItems != null ? #lists.size(cartItems) : 0}">0</div>
+        <div class="cart-badge"
+             th:text="${session.cart != null ? #lists.size(session.cart.cartItems) : 0}">0
+        </div>
     </div>
 
     <div class="cart-bckg" onclick="UIController.toggleCart()"></div>
-
     <div class="cart">
         <h3>Shopping Cart</h3>
         <div class="items">
-            <div class="item" th:each="item : ${cartItems}" th:id="'item-' + ${item.id}"
-                 th:if="${cartItems != null or !cartItems.isEmpty()}">
+            <div class="item" th:each="item : ${session.cart != null ? session.cart.cartItems : {}}"
+                 th:id="'item-' + ${item.id}">
                 <div class="image">
-                    <img th:alt="${item.title}" th:src="${item.image}">
+                    <img alt="" th:alt="${item.product.name}"
+                         th:src="@{'/public/images/' + ${item.product.imageFileName}}">
                 </div>
                 <div class="details">
-                    <h5 th:text="${item.title}">Product Title</h5>
-                    <p>$<span th:text="${item.price * item.count}">0.00</span></p>
+                    <h5 th:text="${item.product.name}">Product Name</h5>
+                    <p class="brand" th:text="${item.product.brand}">Brand</p>
+                    <p>$<span
+                            th:text="${item.product.price.multiply(new java.math.BigDecimal(item.quantity))}">0.00</span>
+                    </p>
                     <div class="counter">
-                        <button th:onclick="'CartController.handleCartAction(' + ${item.id} + ', \'DECREMENT\', ' + ${item.count} + ')'">
+                        <button th:onclick="|CartController.handleCartAction(${item.product.id},'DECREMENT',${item.quantity})|">
                             -
                         </button>
-                        <p th:text="${item.count}">0</p>
-                        <button th:onclick="'CartController.handleCartAction(' + ${item.id} + ', \'INCREMENT\', ' + ${item.count} + ')'">
+                        <p th:text="${item.quantity}">0</p>
+                        <button th:onclick="|CartController.handleCartAction(${item.product.id},'INCREMENT',${item.quantity})|">
                             +
                         </button>
                     </div>
                 </div>
             </div>
         </div>
-        <h3>total: $<span id="cartTotal"
-                          th:text="${cartItems != null ? #aggregates.sum(cartItems.![price * count]) : 0.00}">0.00</span>
+
+        <h3>total: $<span id="totalPrice"
+                          th:text="${session.cart != null ? session.cart.totalPrice : '0.00'}">0.00</span>
         </h3>
+
         <div class="buttons">
             <button onclick="CartController.checkout()">checkout</button>
             <button onclick="UIController.toggleCart()">close</button>
         </div>
     </div>
 
+    <script th:src="@{/js/ui.js}" type="module"></script>
+    <script th:src="@{/js/api.js}" type="module"></script>
     <script th:src="@{/js/cart.js}" type="module"></script>
     <script th:src="@{/js/product-card.js}" type="module"></script>
 </div>

@@ -86,11 +86,9 @@
 
 .item {
     margin: 0;
-    display: grid;
+    display: flex;
     align-items: center;
-    align-content: center;
     justify-content: center;
-    grid-template-columns: 1fr 2fr;
 }
 
 .image {

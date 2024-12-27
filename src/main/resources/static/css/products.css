@@ -17,6 +17,7 @@
 }
 
 .product-panel {
+    padding: 4rem;
     gap: 24px;
     width: 100%;
     margin: auto;

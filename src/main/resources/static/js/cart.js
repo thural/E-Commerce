@@ -5,9 +5,11 @@ console.log("hello from CART JS");
 
 export const CartController = {
    async handleCartAction(itemId, action, currentCount) {
+   console.log("itemId, action and currentCount on handleCartAction: ", itemId, action, currentCount);
        if (action === 'DECREMENT' && currentCount <= 0) return;
        try {
            const data = await APIController.updateCart(itemId, action);
+           console.log("received data and itemId on handleCartAction: ", data, itemId);
            UIController.updateCartUI(data, itemId);
        } catch (error) {
            console.error('Cart action failed:', error);
@@ -15,6 +17,10 @@ export const CartController = {
    },
    checkout() {
        window.location.href = '/checkout';
+   },
+
+   testFun(){
+        console.log("CART module is loaded")
    }
 };
 
