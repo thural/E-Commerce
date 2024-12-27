@@ -31,21 +31,20 @@ public class CartServiceImpl implements CartService {
 
     @Transactional
     public Cart getCart(HttpSession session) {
-        User user = commonService.getSignedUser();
         CartDto cartDto = (CartDto) session.getAttribute("cart");
-
         if (cartDto != null) {
             return cartRepository.findById(cartDto.getId())
-                    .orElseThrow(EntityNotFoundException::new);
+                    .orElseGet(this::createNewCart);
         }
 
-        Cart cart = user.getCart();
-        if (cart != null) return cart;
+        User user = commonService.getSignedUser();
+        return user.getCart() != null ? user.getCart() : createNewCart();
+    }
 
+    private Cart createNewCart() {
         return cartRepository.save(Cart.builder()
-                .user(user)
-                .build()
-        );
+                .user(commonService.getSignedUser())
+                .build());
     }
 
     @Transactional
@@ -55,40 +54,43 @@ public class CartServiceImpl implements CartService {
     }
 
     public Cart addItemToCart(Cart cart, Product product) {
-        CartItem existingCartItem = cart.getCartItems().stream()
+        cart.getCartItems()
+                .stream()
                 .filter(item -> item.getProduct().getId().equals(product.getId()))
                 .findFirst()
-                .orElse(null);
-
-        if (existingCartItem != null) {
-            existingCartItem.setQuantity(existingCartItem.getQuantity() + 1);
-        } else {
-            CartItem cartItem = new CartItem();
-            cartItem.setProduct(product);
-            cartItem.setQuantity(1);
-            cartItem.setCart(cart);
-            cart.getCartItems().add(cartItem);
-        }
+                .ifPresentOrElse(
+                        item -> item.setQuantity(item.getQuantity() + 1),
+                        () -> cart.getCartItems().add(createCartItem(cart, product))
+                );
         return cartRepository.save(cart);
+    }
+
+    private CartItem createCartItem(Cart cart, Product product) {
+        return CartItem.builder()
+                .product(product)
+                .quantity(1)
+                .cart(cart)
+                .build();
     }
 
     public CartDto addItemToCartById(HttpSession session, Long productId) {
         Product product = productService.getProductById(productId)
-                .orElseThrow(EntityNotFoundException::new);
-        Cart cart = getCart(session);
-        Cart updatedCart = addItemToCart(cart, product);
-        return cartMapper.toDto(updatedCart);
+                .orElseThrow(() -> new EntityNotFoundException("Product not found with id: " + productId));
+        return cartMapper.toDto(addItemToCart(getCart(session), product));
     }
 
     @Override
     public CartDto handleCartAction(HttpSession session, CartRequest request) {
-        if (request.getAction().equals(CartAction.INCREMENT))
-            return addItemToCartById(session, request.getItemId());
-        else return removeItemFromCartById(session, request.getItemId());
+        return request.getAction().equals(CartAction.INCREMENT) ?
+                addItemToCartById(session, request.getItemId()) :
+                removeItemFromCartById(session, request.getItemId());
     }
 
     public Cart removeItemFromCart(Cart cart, CartItem cartItem) {
-        cart.getCartItems().remove(cartItem);
+        cart.getCartItems().stream()
+                .filter(item -> item.equals(cartItem))
+                .filter(item -> item.getQuantity() > 0)
+                .forEach(item -> item.setQuantity(item.getQuantity() - 1));
         return cartRepository.save(cart);
     }
 
