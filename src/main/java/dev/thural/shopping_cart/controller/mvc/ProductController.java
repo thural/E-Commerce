@@ -2,7 +2,6 @@ package dev.thural.shopping_cart.controller.mvc;
 
 import dev.thural.shopping_cart.entity.Product;
 import dev.thural.shopping_cart.model.ProductDto;
-import dev.thural.shopping_cart.service.CartService;
 import dev.thural.shopping_cart.service.FileStorageService;
 import dev.thural.shopping_cart.service.ProductService;
 import jakarta.persistence.EntityNotFoundException;
@@ -24,7 +23,6 @@ import java.util.List;
 @RequestMapping("/products")
 public class ProductController {
 
-    private final CartService cartService;
     private final ProductService productService;
     private final FileStorageService fileStorageService;
 

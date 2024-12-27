@@ -4,11 +4,13 @@ import dev.thural.shopping_cart.entity.Cart;
 import dev.thural.shopping_cart.model.CartDto;
 import dev.thural.shopping_cart.model.CartItemDto;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
 
+@Slf4j
 @Component
 @RequiredArgsConstructor
 public class CartMapper {
@@ -16,6 +18,9 @@ public class CartMapper {
     private final CartItemMapper cartItemMapper;
 
     public CartDto toDto(Cart cart) {
+
+        log.info("cart entity on mapper: {}", cart);
+
         CartDto cartDto = new CartDto();
         BeanUtils.copyProperties(cart, cartDto);
         cartDto.setTotalPrice(cart.getTotalItemPrice());

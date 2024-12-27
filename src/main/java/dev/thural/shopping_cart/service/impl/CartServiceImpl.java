@@ -17,6 +17,7 @@ import jakarta.persistence.EntityNotFoundException;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
@@ -28,28 +29,26 @@ public class CartServiceImpl implements CartService {
     private final CartItemService cartItemService;
     private final CartMapper cartMapper;
 
+    @Transactional
     public Cart getCart(HttpSession session) {
         User user = commonService.getSignedUser();
         CartDto cartDto = (CartDto) session.getAttribute("cart");
 
-        if (cartDto.getId() != null) {
-            session.setAttribute("cart", cartDto); // TODO: check for removal
+        if (cartDto != null) {
             return cartRepository.findById(cartDto.getId())
                     .orElseThrow(EntityNotFoundException::new);
-        } else {
-            Cart cart = user.getCart();
-            if (cart == null) {
-                cart = Cart.builder()
-                        .user(user)
-                        .build();
-                cart = cartRepository.save(cart);
-                cartDto = cartMapper.toDto(cart);
-            }
-            session.setAttribute("cart", cartDto);
-            return cart;
         }
+
+        Cart cart = user.getCart();
+        if (cart != null) return cart;
+
+        return cartRepository.save(Cart.builder()
+                .user(user)
+                .build()
+        );
     }
 
+    @Transactional
     @Override
     public CartDto getCartDto(HttpSession session) {
         return cartMapper.toDto(getCart(session));
