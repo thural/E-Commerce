@@ -3,10 +3,10 @@
       xmlns:th="http://www.thymeleaf.org">
 <head>
     <title>Products List</title>
-    <link rel="stylesheet" th:href="@{/css/products.css}">
 </head>
 <body>
 <section>
+    <link rel="stylesheet" th:href="@{/css/products.css}">
     <div th:replace="~{fragments/product-components :: product-admin-actions}"></div>
 
     <div class="alert" th:if="${products == null || products.isEmpty()}">

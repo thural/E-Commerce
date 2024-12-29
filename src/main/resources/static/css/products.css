@@ -19,11 +19,11 @@
 .product-panel {
     padding: 4rem;
     gap: 24px;
-    width: 100%;
     margin: auto;
-    display: grid;
-    grid-template-rows: repeat( auto-fit, minmax(12rem, 1fr) );
-    grid-template-columns: repeat( auto-fit, minmax(12rem, 1fr) );
+    display: flex;
+    flex-flow: row wrap;
+    align-items: center;
+    justify-content: center;
 }
 
 .alert {

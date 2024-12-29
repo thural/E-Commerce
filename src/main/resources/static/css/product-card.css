@@ -2,7 +2,7 @@
     border: #afafaf solid 1px;
     display: grid;
     padding: 1rem;
-    max-width: 240px;
+    width: 240px;
     border-radius: 0.5rem;
     justify-items: center;
     background-color: white;
@@ -60,7 +60,6 @@
     max-width: 240px;
     height: 180px;
     overflow: hidden;
-    position: relative;
 }
 
 .image-container img {

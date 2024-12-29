@@ -21,6 +21,9 @@
             <!-- Name field -->
             <div th:replace="~{fragments/form :: text-field(label='Name', field='name')}"></div>
 
+            <!-- Brand field -->
+            <div th:replace="~{fragments/form :: text-field(label='Brand', field='brand')}"></div>
+
             <!-- Category field -->
             <div th:replace="~{fragments/form :: select-field(label='Category', field='category', items=${categories})}"></div>
 
