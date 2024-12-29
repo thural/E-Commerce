@@ -8,7 +8,6 @@ import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
-@ToString
 @Entity
 @Getter
 @Setter
@@ -22,7 +21,7 @@ public class Cart extends BaseEntity {
     private User user;
 
     @Builder.Default
-    @OneToMany(mappedBy = "cart", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "cart", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
     private List<CartItem> cartItems = new ArrayList<>();
 
     public void addItem(CartItem cartItem) {
@@ -31,6 +30,7 @@ public class Cart extends BaseEntity {
 
     public void removeItem(CartItem cartItem) {
         cartItems.remove(cartItem);
+        cartItem.setCart(null);
     }
 
     public BigDecimal getTotalItemPrice() {
@@ -39,3 +39,4 @@ public class Cart extends BaseEntity {
                 .reduce(BigDecimal.ZERO, BigDecimal::add);
     }
 }
+

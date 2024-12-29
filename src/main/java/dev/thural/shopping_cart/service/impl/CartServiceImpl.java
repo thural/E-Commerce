@@ -16,9 +16,11 @@ import dev.thural.shopping_cart.service.ProductService;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class CartServiceImpl implements CartService {
@@ -47,22 +49,63 @@ public class CartServiceImpl implements CartService {
                 .build());
     }
 
-    @Transactional
     @Override
+    @Transactional
     public CartDto getCartDto(HttpSession session) {
         return cartMapper.toDto(getCart(session));
     }
 
-    public Cart addItemToCart(Cart cart, Product product) {
-        cart.getCartItems()
+    @Transactional
+    public CartDto incrementItemQuantity(HttpSession session, Long productId) {
+        Cart cart = getCart(session);
+        Product product = productService.getProductById(productId)
+                .orElseThrow(() -> new EntityNotFoundException("Product not found with id: " + productId));
+
+        CartItem existingItem = findCartItemByProduct(cart, product);
+
+        if (existingItem != null) {
+            existingItem.setQuantity(existingItem.getQuantity() + 1);
+        } else {
+            cart.addItem(createCartItem(cart, product));
+        }
+
+        return cartMapper.toDto(cart);
+    }
+
+    @Transactional
+    public CartDto decrementItemQuantity(HttpSession session, Long itemId) {
+        Cart cart = getCart(session);
+        CartItem cartItem = cartItemService.getCartItemById(itemId);
+
+        int newQuantity = cartItem.getQuantity() - 1;
+        if (newQuantity <= 0) {
+            removeCartItem(cart, cartItem);
+        } else {
+            cartItem.setQuantity(newQuantity);
+        }
+
+        return cartMapper.toDto(cart);
+    }
+
+    @Transactional
+    public CartDto removeCartItem(HttpSession session, Long itemId) {
+        Cart cart = getCart(session);
+        CartItem cartItem = cartItemService.getCartItemById(itemId);
+        removeCartItem(cart, cartItem);
+        return cartMapper.toDto(cart);
+    }
+
+    private void removeCartItem(Cart cart, CartItem cartItem) {
+        cart.removeItem(cartItem);
+        cartItemService.deleteCartItem(cartItem);
+    }
+
+    private CartItem findCartItemByProduct(Cart cart, Product product) {
+        return cart.getCartItems()
                 .stream()
                 .filter(item -> item.getProduct().getId().equals(product.getId()))
                 .findFirst()
-                .ifPresentOrElse(
-                        item -> item.setQuantity(item.getQuantity() + 1),
-                        () -> cart.getCartItems().add(createCartItem(cart, product))
-                );
-        return cartRepository.save(cart);
+                .orElse(null);
     }
 
     private CartItem createCartItem(Cart cart, Product product) {
@@ -73,32 +116,11 @@ public class CartServiceImpl implements CartService {
                 .build();
     }
 
-    public CartDto addItemToCartById(HttpSession session, Long productId) {
-        Product product = productService.getProductById(productId)
-                .orElseThrow(() -> new EntityNotFoundException("Product not found with id: " + productId));
-        return cartMapper.toDto(addItemToCart(getCart(session), product));
-    }
-
     @Override
+    @Transactional
     public CartDto handleCartAction(HttpSession session, CartRequest request) {
         return request.getAction().equals(CartAction.INCREMENT) ?
-                addItemToCartById(session, request.getItemId()) :
-                removeItemFromCartById(session, request.getItemId());
-    }
-
-    public Cart removeItemFromCart(Cart cart, CartItem cartItem) {
-        cart.getCartItems().stream()
-                .filter(item -> item.equals(cartItem))
-                .filter(item -> item.getQuantity() > 0)
-                .forEach(item -> item.setQuantity(item.getQuantity() - 1));
-        return cartRepository.save(cart);
-    }
-
-    @Override
-    public CartDto removeItemFromCartById(HttpSession session, Long productId) {
-        Cart cart = getCart(session);
-        CartItem cartItem = cartItemService.getCartItemById(productId);
-        Cart updatedCart = removeItemFromCart(cart, cartItem);
-        return cartMapper.toDto(updatedCart);
+                incrementItemQuantity(session, request.getItemId()) :
+                decrementItemQuantity(session, request.getItemId());
     }
 }
