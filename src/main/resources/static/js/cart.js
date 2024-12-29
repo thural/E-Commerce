@@ -2,33 +2,39 @@ import { APIController } from './api.js';
 import { UIController } from './ui.js';
 
 console.log("hello from CART JS");
-
 export const CartController = {
-   async handleCartAction(itemId, action, currentCount) {
-   console.log("itemId, action and currentCount on handleCartAction: ", itemId, action, currentCount);
-       if (action === 'DECREMENT' && currentCount <= 0) return;
-       try {
-           const data = await APIController.updateCart(itemId, action);
-           console.log("received data and itemId on handleCartAction: ", data, itemId);
-           UIController.updateCartUI(data, itemId);
-       } catch (error) {
-           console.error('Cart action failed:', error);
-       }
-   },
-   checkout() {
-       window.location.href = '/checkout';
-   },
+    async handleCartAction(itemId, action, currentCount) {
+        console.log("itemId, action and currentCount on handleCartAction: ", itemId, action, currentCount);
+        if (action === 'DECREMENT' && currentCount <= 0) return;
 
-   testFun(){
+        try {
+            const data = await APIController.updateCart(itemId, action);
+            console.log("received data and itemId on handleCartAction: ", data, itemId);
+            UIController.updateCartUI(data, itemId);
+
+            // Show cart if adding new item
+            if (action === 'INCREMENT' && currentCount === 0) {
+                UIController.toggleCart();
+            }
+        } catch (error) {
+            console.error('Cart action failed:', error);
+        }
+    },
+
+    checkout() {
+        window.location.href = '/checkout';
+    },
+
+    testFun() {
         console.log("CART module is loaded")
-   }
+    }
 };
 
 window.CartController = CartController;
 
 document.addEventListener('DOMContentLoaded', () => {
-   const cartToggle = document.querySelector('.cart-toggle');
-   if (cartToggle) {
-       cartToggle.addEventListener('click', () => UIController.toggleCart());
-   }
+    const cartToggle = document.querySelector('.cart-toggle');
+    if (cartToggle) {
+        cartToggle.addEventListener('click', () => UIController.toggleCart());
+    }
 });
