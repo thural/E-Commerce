@@ -11,7 +11,7 @@ public interface CartService {
 
     CartDto incrementItemQuantity(HttpSession session, Long productId);
 
-    CartDto decrementItemQuantity(HttpSession session, Long itemId);
+    CartDto decrementItemQuantity(HttpSession session, Long productId);
 
     CartDto removeCartItem(HttpSession session, Long itemId);
 }

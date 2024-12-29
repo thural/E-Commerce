@@ -10,10 +10,30 @@ export const UIController = {
 
     toggleCart() {
         console.log("cart was toggled");
-        const {cart, cartBackground} = this.elements;
+        const { cart, cartBackground } = this.elements;
         const isHidden = cart.style.display === 'none' || !cart.style.display;
         cart.style.display = isHidden ? 'grid' : 'none';
         cartBackground.style.display = isHidden ? 'block' : 'none';
+    },
+
+    createCartItemElement(item) {
+        return `
+                <div class="item" id="item-${item.product.id}">
+                    <div class="image">
+                        <img src="/public/images/${item.product.imageFileName}" alt="${item.product.name}">
+                    </div>
+                    <div class="details">
+                        <h5>${item.product.name}</h5>
+                        <p class="brand">${item.product.brand || 'Brand'}</p>
+                        <p>$<span>${(item.product.price * item.quantity).toFixed(2)}</span></p>
+                        <div class="counter">
+                            <button onclick="CartController.handleCartAction(${item.product.id},'DECREMENT',${item.quantity})">-</button>
+                            <p>${item.quantity}</p>
+                            <button onclick="CartController.handleCartAction(${item.product.id},'INCREMENT',${item.quantity})">+</button>
+                        </div>
+                    </div>
+                </div>
+            `;
     },
 
     updateCartUI(data, productId) {
@@ -28,25 +48,30 @@ export const UIController = {
             const item = data.cartItems.find(item => item.product.id === Number(productId));
             if (!item) {
                 console.warn(`Item with product ID ${productId} not found in cart`);
+                const itemElement = document.getElementById(`item-${productId}`);
+                itemElement.remove();
                 return;
             }
 
-            const itemElement = document.getElementById(`item-${productId}`);
+            let itemElement = document.getElementById(`item-${item.product.id}`);
+
+
+            // If item doesn't exist in cart, create it
             if (!itemElement) {
-                // If element doesn't exist, we'll need a page refresh to get the updated cart HTML
-                window.location.reload();
-                return;
-            }
+                console.warn("itemElement is not found on the cart, appending new element");
+                const newItemHtml = this.createCartItemElement(item);
+                this.elements.itemsContainer.insertAdjacentHTML('beforeend', newItemHtml);
+                itemElement = document.getElementById(`item-${item.product.id}`);
+            } else if (item.quantity >= 1) {
+                console.log("updating cart item")
+                // Update existing item
+                const countElement = itemElement.querySelector('.counter p');
+                const priceElement = itemElement.querySelector('.details p > span');
 
-            // Update existing item
-            const countElement = itemElement.querySelector('.counter p');
-            const priceElement = itemElement.querySelector('.details p > span');
-
-            countElement.textContent = item.quantity;
-            priceElement.textContent = (item.product.price * item.quantity).toFixed(2);
-
-            // Remove item if quantity is 0
-            if (item.quantity <= 0) {
+                countElement.textContent = item.quantity;
+                priceElement.textContent = (item.product.price * item.quantity).toFixed(2);
+            } else {
+                console.log("removing cart item...")
                 itemElement.remove();
             }
 

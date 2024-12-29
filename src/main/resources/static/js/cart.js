@@ -3,19 +3,14 @@ import { UIController } from './ui.js';
 
 console.log("hello from CART JS");
 export const CartController = {
-    async handleCartAction(itemId, action, currentCount) {
-        console.log("itemId, action and currentCount on handleCartAction: ", itemId, action, currentCount);
+    async handleCartAction(productId, action, currentCount) {
+        console.log("itemId, action and currentCount on handleCartAction: ", productId, action, currentCount);
         if (action === 'DECREMENT' && currentCount <= 0) return;
 
         try {
-            const data = await APIController.updateCart(itemId, action);
-            console.log("received data and itemId on handleCartAction: ", data, itemId);
-            UIController.updateCartUI(data, itemId);
-
-            // Show cart if adding new item
-            if (action === 'INCREMENT' && currentCount === 0) {
-                UIController.toggleCart();
-            }
+            const data = await APIController.updateCart(productId, action);
+            console.log("received data and itemId on handleCartAction: ", data, productId);
+            UIController.updateCartUI(data, productId);
         } catch (error) {
             console.error('Cart action failed:', error);
         }

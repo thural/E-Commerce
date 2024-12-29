@@ -58,24 +58,23 @@ public class CartServiceImpl implements CartService {
     @Transactional
     public CartDto incrementItemQuantity(HttpSession session, Long productId) {
         Cart cart = getCart(session);
-        Product product = productService.getProductById(productId)
-                .orElseThrow(() -> new EntityNotFoundException("Product not found with id: " + productId));
 
-        CartItem existingItem = findCartItemByProduct(cart, product);
+        CartItem existingItem = findCartItemByProduct(cart, productId);
 
         if (existingItem != null) {
             existingItem.setQuantity(existingItem.getQuantity() + 1);
         } else {
-            cart.addItem(createCartItem(cart, product));
+            cart.addItem(createCartItem(cart, productId));
         }
 
         return cartMapper.toDto(cart);
     }
 
     @Transactional
-    public CartDto decrementItemQuantity(HttpSession session, Long itemId) {
+    public CartDto decrementItemQuantity(HttpSession session, Long productId) {
         Cart cart = getCart(session);
-        CartItem cartItem = cartItemService.getCartItemById(itemId);
+
+        CartItem cartItem = findCartItemByProduct(cart, productId);
 
         int newQuantity = cartItem.getQuantity() - 1;
         if (newQuantity <= 0) {
@@ -100,7 +99,9 @@ public class CartServiceImpl implements CartService {
         cartItemService.deleteCartItem(cartItem);
     }
 
-    private CartItem findCartItemByProduct(Cart cart, Product product) {
+    private CartItem findCartItemByProduct(Cart cart, Long productId) {
+        Product product = productService.getProductById(productId)
+                .orElseThrow(EntityNotFoundException::new);
         return cart.getCartItems()
                 .stream()
                 .filter(item -> item.getProduct().getId().equals(product.getId()))
@@ -108,7 +109,9 @@ public class CartServiceImpl implements CartService {
                 .orElse(null);
     }
 
-    private CartItem createCartItem(Cart cart, Product product) {
+    private CartItem createCartItem(Cart cart, Long productId) {
+        Product product = productService.getProductById(productId)
+                .orElseThrow(EntityNotFoundException::new);
         return CartItem.builder()
                 .product(product)
                 .quantity(1)
@@ -120,7 +123,7 @@ public class CartServiceImpl implements CartService {
     @Transactional
     public CartDto handleCartAction(HttpSession session, CartRequest request) {
         return request.getAction().equals(CartAction.INCREMENT) ?
-                incrementItemQuantity(session, request.getItemId()) :
-                decrementItemQuantity(session, request.getItemId());
+                incrementItemQuantity(session, request.getProductId()) :
+                decrementItemQuantity(session, request.getProductId());
     }
 }

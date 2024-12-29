@@ -1,0 +1,24 @@
+<!-- cartItem.html -->
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<div class="item" th:fragment="itemFragment" th:id="'item-' + ${item.product.id}">
+    <div class="image">
+        <img alt="" th:alt="${item.product.name}"
+             th:src="@{'/public/images/' + ${item.product.imageFileName}}">
+    </div>
+    <div class="details">
+        <h5 th:text="${item.product.name}">Product Name</h5>
+        <p class="brand" th:text="${item.product.brand}">Brand</p>
+        <p>$<span th:text="${item.product.price.multiply(new java.math.BigDecimal(item.quantity))}">0.00</span></p>
+        <div class="counter">
+            <button th:onclick="|CartController.handleCartAction(${item.product.id}, 'DECREMENT', ${item.quantity})|">
+                -
+            </button>
+            <p th:text="${item.quantity}">0</p>
+            <button th:onclick="|CartController.handleCartAction(${item.product.id}, 'INCREMENT', ${item.quantity})|">
+                +
+            </button>
+        </div>
+    </div>
+</div>

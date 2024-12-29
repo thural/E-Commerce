@@ -1,5 +1,5 @@
 export const APIController = {
-    async updateCart(itemId, action) {
+    async updateCart(productId, action) {
         const csrfToken = document.querySelector('meta[name="_csrf"]').content;
         const csrfHeader = document.querySelector('meta[name="_csrf_header"]').content;
 
@@ -10,7 +10,7 @@ export const APIController = {
                     'Content-Type': 'application/json',
                     [csrfHeader]: csrfToken
                 },
-                body: JSON.stringify({ itemId, action })
+                body: JSON.stringify({ productId, action })
             });
             return await response.json();
         } catch (error) {
