@@ -96,6 +96,15 @@
          th:if="${#fields.hasErrors(field)}"></div>
 </div>
 
+<!-- Simple Input Field Fragment (for non-validated forms like login) -->
+<div class="form-group" th:fragment="simple-input (label, name, type)">
+    <input class="form-input"
+           required
+           th:name="${name}"
+           th:placeholder="${label}"
+           th:type="${type}">
+</div>
+
 <!-- Form Actions Fragment -->
 <div class="form-actions" th:fragment="form-actions">
     <button class="button primary" type="submit">Submit</button>

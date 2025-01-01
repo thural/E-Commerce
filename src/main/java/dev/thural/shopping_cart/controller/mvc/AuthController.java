@@ -26,6 +26,12 @@ public class AuthController {
         return "login";
     }
 
+    @GetMapping("/logout")
+    public String getLogout(HttpServletRequest request, HttpServletResponse response) {
+        authService.logout(request, response);
+        return "redirect:/login?logout";
+    }
+
     @PostMapping("/logout")
     public String logout(HttpServletRequest request, HttpServletResponse response) {
         authService.logout(request, response);
