@@ -20,6 +20,9 @@
             add to cart
         </button>
     </div>
+
+    <div th:replace="~{products/fragments/product-description :: product-description-modal(${product})}"></div>
+
     <!-- Include JavaScript at the end of body -->
     <script th:src="@{/js/product-card.js}" type="module"></script>
 </div>

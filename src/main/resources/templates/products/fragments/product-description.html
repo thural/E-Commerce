@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<body>
+<div th:fragment="product-description-modal(product)">
+    <div th:replace="~{components/modal :: modal('productModal-' + ${product.id}, ~{::modalContent})}">
+        <div class="product-modal-content" th:fragment="modalContent">
+            <link rel="stylesheet" th:href="@{/css/product-description-modal.css}">
+
+            <div class="modal-carousel">
+                <div class="carousel-track" th:if="${product.images != null and !product.images.empty}">
+                    <img alt="Product Image"
+                         class="carousel-image"
+                         th:each="image : ${product.images}"
+                         th:src="@{'/public/images/' + ${image}}">
+                </div>
+                <div class="carousel-track" th:if="${product.images == null or product.images.empty}">
+                    <img alt="Default Product Image"
+                         class="carousel-image"
+                         th:src="@{'/public/images/default-product.png'}">
+                </div>
+                <button class="carousel-button prev">←</button>
+                <button class="carousel-button next">→</button>
+                <div class="carousel-dots"></div>
+            </div>
+
+            <div class="product-details">
+                <h2 th:text="${product.name}"></h2>
+                <p class="description" th:text="${product.description}"></p>
+                <p class="price">$<span th:text="${product.price}"></span></p>
+
+                <div class="product-actions">
+                    <button class="add-to-wishlist-btn"
+                            th:data-product-id="${product.id}">
+                        Add to Wishlist
+                    </button>
+
+                    <button class="add-to-cart-btn"
+                            th:data-product-id="${product.id}"
+                            th:data-product-name="${product.name}"
+                            th:data-product-price="${product.price}">
+                        Add to Cart
+                    </button>
+
+                    <button class="contact-seller-btn"
+                            th:data-seller-id="${product.sellerId}">
+                        Contact Seller
+                    </button>
+                </div>
+            </div>
+
+            <script th:src="@{/js/product-description-modal.js}" type="module"></script>
+        </div>
+    </div>
+</div>
+</body>
+</html>

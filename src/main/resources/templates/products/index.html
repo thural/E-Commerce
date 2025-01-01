@@ -15,8 +15,7 @@
 
     <div class="product-panel">
         <th:block th:each="product : ${products}">
-            <div th:replace="~{components/product-card :: product-card(${product})}">
-            </div>
+            <div th:replace="~{products/fragments/product-card :: product-card(${product})}"></div>
         </th:block>
     </div>
     <script th:src="@{/js/products.js}"></script>

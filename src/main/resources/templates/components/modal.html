@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<body>
+<div class="modal" th:fragment="modal(id, content)" th:id="${id}">
+    <link rel="stylesheet" th:href="@{/css/modal.css}">
+
+    <div class="modal-content">
+        <span class="modal-close">&times;</span>
+        <div class="modal-body" th:insert="${content}">
+            <!-- Content will be inserted here -->
+        </div>
+    </div>
+
+    <script th:src="@{/js/modal.js}" type="module"></script>
+</div>
+</body>
+</html>
