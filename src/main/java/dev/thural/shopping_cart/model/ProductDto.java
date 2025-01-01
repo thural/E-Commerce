@@ -12,6 +12,7 @@ import lombok.experimental.SuperBuilder;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.math.BigDecimal;
+import java.util.List;
 
 
 @Data
@@ -34,4 +35,5 @@ public class ProductDto extends BaseResponse {
     @ValidFileSize(maxSize = 5242880, message = "File size must be less than 5MB")
     private MultipartFile imageFile;
     private String imageFileName;
+    private List<String> imageFileNames;
 }

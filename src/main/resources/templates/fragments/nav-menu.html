@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html
+        xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity6"
+        xmlns:th="http://www.thymeleaf.org"
+>
+<head>
+    <meta charset="UTF-8">
+</head>
+
+<!-- Navigation Menu with clickable items -->
+<div th:fragment="nav-menu" th:replace="~{components/hamburger-menu :: hamburger-menu(~{::section})}">
+    <section>
+        <div th:replace="~{components/clickable :: clickable('/home', 'Home')}"></div>
+        <div th:replace="~{components/clickable :: clickable('/products', 'Products')}"></div>
+        <div th:replace="~{components/clickable :: clickable('/orders', 'Orders')}"></div>
+        <div th:replace="~{components/clickable :: clickable('/privacy', 'Privacy')}"></div>
+        <div sec:authorize="isAuthenticated()"
+             th:replace="~{components/clickable :: clickable('/logout', 'Logout')}"></div>
+        <div sec:authorize="!isAuthenticated()"
+             th:replace="~{components/clickable :: clickable('/login', 'Login')}"></div>
+    </section>
+</div>

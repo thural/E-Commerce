@@ -16,15 +16,15 @@ import java.util.List;
 @NoArgsConstructor
 public class Product extends BaseEntity {
 
+    @ElementCollection
+    private List<String> imageFileNames;
     private String name;
     private String brand;
     private BigDecimal price;
     private String category;
     private String imageFileName;
-
     @Column(columnDefinition = "TEXT")
     private String description;
-
     @OneToMany(mappedBy = "product",
             fetch = FetchType.LAZY,
             cascade = CascadeType.ALL)

@@ -1,0 +1,11 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<body>
+<div th:fragment="clickable(href, content)">
+    <link rel="stylesheet" th:href="@{/css/clickable.css}">
+    <a class="clickable" th:href="${href}">
+        <div class="clickable-content" th:utext="${content}"></div>
+    </a>
+</div>
+</body>
+</html>

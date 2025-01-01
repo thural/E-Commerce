@@ -7,13 +7,13 @@
             <link rel="stylesheet" th:href="@{/css/product-description-modal.css}">
 
             <div class="modal-carousel">
-                <div class="carousel-track" th:if="${product.images != null and !product.images.empty}">
+                <div class="carousel-track" th:if="${product.imageFileNames != null and !product.imageFileNames.empty}">
                     <img alt="Product Image"
                          class="carousel-image"
-                         th:each="image : ${product.images}"
+                         th:each="image : ${product.imageFileNames}"
                          th:src="@{'/public/images/' + ${image}}">
                 </div>
-                <div class="carousel-track" th:if="${product.images == null or product.images.empty}">
+                <div class="carousel-track" th:if="${product.imageFileNames == null or product.imageFileNames.empty}">
                     <img alt="Default Product Image"
                          class="carousel-image"
                          th:src="@{'/public/images/default-product.png'}">
@@ -41,10 +41,10 @@
                         Add to Cart
                     </button>
 
-                    <button class="contact-seller-btn"
-                            th:data-seller-id="${product.sellerId}">
-                        Contact Seller
-                    </button>
+                    <!--                    <button class="contact-seller-btn"-->
+                    <!--                            th:data-seller-id="${product.sellerId}">-->
+                    <!--                        Contact Seller-->
+                    <!--                    </button>-->
                 </div>
             </div>
 

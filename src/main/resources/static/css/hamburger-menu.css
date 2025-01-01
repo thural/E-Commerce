@@ -1,0 +1,80 @@
+.hamburger-button {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    width: 2rem;
+    height: 2rem;
+    padding: 0.25rem;
+    border: none;
+    background: transparent;
+    cursor: pointer;
+}
+
+.hamburger-button span {
+    width: 100%;
+    height: 2px;
+    background-color: white;
+    transition: all 0.3s;
+}
+
+.menu-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    opacity: 0;
+    visibility: hidden;
+    transition: all 0.3s;
+    z-index: 998;
+}
+
+.hamburger-nav {
+    display: flex;
+    flex-flow: column nowrap;
+    position: fixed;
+    top: 0;
+    right: -100%;
+    width: 300px;
+    height: 100%;
+    background: black;
+    transition: right 0.3s;
+    z-index: 999;
+    box-shadow: -2px 0 8px rgba(0, 0, 0, 0.1);
+}
+
+.menu-header {
+    padding: 1rem;
+    position: absolute;
+    color: white;
+    top: 1rem;
+    right: 1rem;
+}
+
+.close-menu {
+    background: none;
+    border: none;
+    font-size: 1.5rem;
+    cursor: pointer;
+    padding: 0.5rem;
+    color: white;
+}
+
+.menu-content {
+    padding: 1rem 0;
+}
+
+/* Open state classes */
+body.menu-open {
+    overflow: hidden;
+}
+
+body.menu-open .menu-overlay {
+    opacity: 1;
+    visibility: visible;
+}
+
+body.menu-open .hamburger-nav {
+    right: 0;
+}
